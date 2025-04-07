@@ -5,10 +5,15 @@ import cors from 'cors';
 
 const prisma = new PrismaClient();
 const app = express();
-const PORT = process.env.BACKEND_PORT || 3001;
+const PORT = parseInt(process.env.BACKEND_PORT || '3001', 10);
+const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
 
 // --- Middlewares ---
-app.use(cors());
+app.use(cors({
+  origin: CORS_ORIGIN,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // --- Routes ---
@@ -88,7 +93,6 @@ app.put('/api/projects/:id', (req, res) => {
     return res.status(400).json({ error: 'Title and status are required' });
   }
   
-  // First check if the project exists
   prisma.project.findUnique({
     where: { id }
   })
@@ -98,7 +102,6 @@ app.put('/api/projects/:id', (req, res) => {
       return null;
     }
     
-    // Then perform the update if project exists
     return prisma.project.update({
       where: { id },
       data: {
@@ -127,7 +130,6 @@ app.put('/api/projects/:id', (req, res) => {
 app.delete('/api/projects/:id', (req, res) => {
   const id = req.params.id;
   
-  // First check if the project exists
   prisma.project.findUnique({
     where: { id }
   })
@@ -137,7 +139,6 @@ app.delete('/api/projects/:id', (req, res) => {
       return null;
     }
     
-    // Then perform the delete if project exists
     return prisma.project.delete({
       where: { id }
     });
@@ -154,6 +155,7 @@ app.delete('/api/projects/:id', (req, res) => {
 });
 
 // --- Start Server ---
-app.listen(PORT, () => {
-  console.log(`Backend server running at http://localhost:${PORT}`);
+// Use 0.0.0.0 to listen on all interfaces - important for Docker
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Backend server running at http://0.0.0.0:${PORT}`);
 });

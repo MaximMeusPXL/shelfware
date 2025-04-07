@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { Project, ProjectFormData } from '../interfaces/Project.ts';
+import { Project, ProjectFormData } from '../interfaces/Project';
 
-// API base URL - should be environment variable in production
-const API_URL = 'http://localhost:3001/api/projects';
+// Get the API URL from environment variables or use a default for development
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/projects';
 
 // Get all projects
 export const getProjects = async (): Promise<Project[]> => {

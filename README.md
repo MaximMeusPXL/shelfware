@@ -112,7 +112,7 @@ shelfware/
 
 ## Screenshots
 
-[TODO]
+![screenshot](screenshot1.png)
 
 ## API Endpoints
 

@@ -135,16 +135,42 @@ a:hover {
 .navbar {
   background-color: var(--secondary);
   width: 100%;
-  padding: 0.5%;
+  padding: 0 5%;
+  display: flex;
+  align-items: center;
+  height: 70px;
 }
+
 .navbar-logo {
-  margin-left: 20px; /* Add space to the left of the logo */
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
 }
+
+.navbar-logo a {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  margin-right: 15px; /* Space between logo and text */
+}
+
 .logo-text {
   font-size: 1.5rem;
   font-weight: bold;
-  display: inline-block;
-  text-align: center; /* Center the text */
+  font-size: 2.4rem;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.navbar-links {
+  margin-left: auto; /* Push links to the right */
 }
 
 /* ======================================

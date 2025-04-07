@@ -14,6 +14,7 @@
   .overview-header h1 {
     margin: 0;
     color: #2c3e50;
+    font-size: 2.2rem;
   }
   
   .add-project-button {
@@ -27,7 +28,8 @@
   }
   
   .add-project-button:hover {
-    background-color: #27ae60;
+    background-color: #1e944f;
+    color: white
   }
   
   .error-message {

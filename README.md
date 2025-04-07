@@ -81,7 +81,7 @@ shelfware/
 
 3. Create a `.env` file with database connection details:
    ```
-   DATABASE_URL="postgresql://username:password@localhost:5432/shelfware?schema=public"
+   DATABASE_URL="postgresql://postgress:pxlpxlpxl@db:5432/shelfware?schema=public"
    BACKEND_PORT=3001
    ```
 

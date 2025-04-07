@@ -22,6 +22,9 @@ const Navbar: React.FC = () => {
 {/*        <li className={location.pathname === '/create' ? 'active' : ''}>
           <Link to="/create">Add Project</Link>
         </li> */}
+        <li>
+          <a href="https://github.com/PXL-Digital-Application-Samples/shelfware" target="_blank" rel="noopener noreferrer">Docs</a>
+        </li>
       </ul>
     </nav>
   );

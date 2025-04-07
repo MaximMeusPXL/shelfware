@@ -49,7 +49,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete }) => {
       
       {project.hardwareInfo && (
         <div className="hardware-info">
-          <h4>Hardware:</h4>
+          <h4>Components:</h4>
           <pre>{formatHardwareInfo(project.hardwareInfo)}</pre>
         </div>
       )}

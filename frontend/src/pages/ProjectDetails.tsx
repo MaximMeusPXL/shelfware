@@ -157,7 +157,7 @@ const ProjectDetails: React.FC = () => {
         
         {project.hardwareInfo && (
           <div className="details-section">
-            <h2>Hardware Info</h2>
+            <h2>Components</h2>
             <div className="hardware-info-box">
               <pre>{formatHardwareInfo(project.hardwareInfo)}</pre>
             </div>

@@ -234,7 +234,7 @@ const EditProject: React.FC = () => {
         
         <div className="form-group">
           <label htmlFor="hardwareInfo">
-            Hardware Info <span className="hint">(JSON format)</span>
+            Components <span className="hint">(JSON format)</span>
           </label>
           <textarea
             id="hardwareInfo"

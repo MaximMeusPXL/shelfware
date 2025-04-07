@@ -25,7 +25,7 @@ const App: React.FC = () => {
         </main>
         <ThemeToggle />
         <footer className="footer">
-          <p>&copy; {new Date().getFullYear()} Shelfware Tracker - Track your side projects</p>
+          <p>&copy; {new Date().getFullYear()} Hogeschool PXL. PXL Shelfware Tracker - Track your side projects</p>
         </footer>
       </div>
     </BrowserRouter>

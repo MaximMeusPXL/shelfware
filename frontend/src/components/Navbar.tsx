@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
       <div className="navbar-logo">
         <Link to="/">
           <img src={logo} alt="Shelfware Tracker Logo" className="logo-image" />
-          <span className="logo-text">Shelfware Tracker</span>
+          <span className="logo-text">PXL Shelfware Tracker</span>
         </Link>
       </div>
       

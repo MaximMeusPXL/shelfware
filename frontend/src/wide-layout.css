@@ -1,0 +1,101 @@
+/* ======================================
+   CONTAINER WIDTHS - MUCH WIDER & CENTERED
+====================================== */
+.projects-overview,
+.project-form-container,
+.project-details-container {
+  max-width: 2800px; /* Doubled from 1400px */
+  width: 90%; /* Slightly reduced to ensure proper centering */
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20px;
+}
+
+.project-form {
+  max-width: 2000px; /* Doubled from 1000px */
+  margin: 0 auto;
+}
+
+/* For larger screens - even wider */
+@media (min-width: 1600px) {
+  .projects-overview,
+  .project-form-container,
+  .project-details-container {
+    max-width: 3600px; /* Doubled from 1800px */
+  }
+}
+
+/* ======================================
+   PROJECT GRID - MORE COLUMNS
+====================================== */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+}
+
+/* Add more columns for wider screens */
+@media (min-width: 1200px) {
+  .projects-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+}
+
+@media (min-width: 1600px) {
+  .projects-grid {
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  }
+}
+
+@media (min-width: 2400px) {
+  .projects-grid {
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  }
+}
+
+/* ======================================
+   ENSURE PROPER CENTERING
+====================================== */
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.main-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-content > * {
+  width: 100%;
+}
+
+/* ======================================
+   SEARCH AND FILTERS - WIDER
+====================================== */
+.filters {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 40px; /* Increased gap */
+  align-items: center;
+}
+
+.search-box {
+  flex: 1;
+  max-width: 80%; /* Increased from 70% */
+}
+
+.status-filter {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Increased gap */
+  min-width: 200px; /* Slightly wider */
+  white-space: nowrap;
+}

@@ -1,0 +1,115 @@
+.projects-overview {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .overview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .overview-header h1 {
+    margin: 0;
+    color: #2c3e50;
+  }
+  
+  .add-project-button {
+    background-color: #2ecc71;
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+  
+  .add-project-button:hover {
+    background-color: #27ae60;
+  }
+  
+  .error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+  
+  .filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 20px;
+  }
+  
+  .search-box {
+    flex-grow: 1;
+  }
+  
+  .search-box input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .status-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .status-filter label {
+    font-weight: 500;
+  }
+  
+  .status-filter select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 40px 0;
+    color: #666;
+  }
+  
+  .empty-add-button {
+    display: inline-block;
+    margin-top: 15px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    .filters {
+      flex-direction: column;
+    }
+    
+    .overview-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+    
+    .add-project-button {
+      align-self: flex-start;
+    }
+  }

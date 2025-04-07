@@ -27,7 +27,11 @@ The application provides a clean, responsive interface for managing your project
 - Node.js with Express
 - TypeScript
 - Prisma ORM
+
+### Database
 - PostgreSQL database
+- Mariadb (planned)
+- Mongodb (planned)
 
 ### Frontend
 - React

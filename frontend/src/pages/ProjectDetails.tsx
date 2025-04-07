@@ -158,11 +158,54 @@ const ProjectDetails: React.FC = () => {
         {project.hardwareInfo && (
           <div className="details-section">
             <h2>Components</h2>
-            <div className="hardware-info-box">
-              <pre>{formatHardwareInfo(project.hardwareInfo)}</pre>
+            <div className="components-detail-container">
+              {(() => {
+                try {
+                  const componentsData = typeof project.hardwareInfo === 'string'
+                    ? JSON.parse(project.hardwareInfo)
+                    : project.hardwareInfo;
+                    
+                  // Check if it's an object and not an array
+                  if (componentsData && typeof componentsData === 'object' && !Array.isArray(componentsData)) {
+                    return (
+                      <table className="components-table">
+                        <thead>
+                          <tr>
+                            <th>Component</th>
+                            <th>Specification</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {Object.entries(componentsData).map(([key, value]) => (
+                            <tr key={key}>
+                              <td className="component-key">{key}</td>
+                              <td className="component-value">{String(value)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    );
+                  } else {
+                    // If it's not a proper object, fallback to raw display
+                    return (
+                      <div className="components-raw-detail">
+                        <pre>{formatHardwareInfo(project.hardwareInfo)}</pre>
+                      </div>
+                    );
+                  }
+                } catch (error) {
+                  // If parsing fails, show raw format
+                  return (
+                    <div className="components-raw-detail">
+                      <pre>{formatHardwareInfo(project.hardwareInfo)}</pre>
+                    </div>
+                  );
+                }
+              })()}
             </div>
           </div>
         )}
+
         
         <div className="details-metadata">
           {project.createdAt && (

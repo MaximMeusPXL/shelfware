@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Project } from '../interfaces/Project.ts';
 import { formatDate, getStatusColor, formatHardwareInfo } from '../utils/formatters.ts';
@@ -10,8 +10,77 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete }) => {
+  const [isComponentsExpanded, setIsComponentsExpanded] = useState(false);
+  
   const statusStyle = {
     backgroundColor: getStatusColor(project.status)
+  };
+
+  // Parse and render hardware/components info in a clean way
+  const renderComponents = () => {
+    if (!project.hardwareInfo) return null;
+    
+    let componentsData;
+    try {
+      // If it's already an object, use it directly
+      componentsData = typeof project.hardwareInfo === 'string' 
+        ? JSON.parse(project.hardwareInfo) 
+        : project.hardwareInfo;
+    } catch (error) {
+      // If parsing fails, just return the string
+      return (
+        <div className="component-raw">
+          {String(project.hardwareInfo)}
+        </div>
+      );
+    }
+    
+    // If it's an empty object or not an object, return null
+    if (!componentsData || typeof componentsData !== 'object' || Array.isArray(componentsData)) {
+      return null;
+    }
+    
+    // If components data is small or expanded, show all items
+    const entries = Object.entries(componentsData);
+    const shouldShowAll = isComponentsExpanded || entries.length <= 3;
+    const displayedEntries = shouldShowAll ? entries : entries.slice(0, 3);
+    
+    return (
+      <div className="components-container">
+        <ul className="components-list">
+          {displayedEntries.map(([key, value]) => (
+            <li key={key} className="component-item">
+              <span className="component-name">{key}:</span>
+              <span className="component-value">{String(value)}</span>
+            </li>
+          ))}
+        </ul>
+        
+        {!shouldShowAll && entries.length > 3 && (
+          <button 
+            className="components-expand-button"
+            onClick={(e) => {
+              e.preventDefault(); // Prevent navigating away
+              setIsComponentsExpanded(true);
+            }}
+          >
+            Show {entries.length - 3} more...
+          </button>
+        )}
+        
+        {isComponentsExpanded && entries.length > 3 && (
+          <button 
+            className="components-collapse-button"
+            onClick={(e) => {
+              e.preventDefault(); // Prevent navigating away
+              setIsComponentsExpanded(false);
+            }}
+          >
+            Show less
+          </button>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -48,9 +117,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete }) => {
       </div>
       
       {project.hardwareInfo && (
-        <div className="hardware-info">
+        <div className="components-info">
           <h4>Components:</h4>
-          <pre>{formatHardwareInfo(project.hardwareInfo)}</pre>
+          {renderComponents()}
         </div>
       )}
       

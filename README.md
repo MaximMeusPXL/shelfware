@@ -1,167 +1,213 @@
 # PXL Shelfware Tracker
 
-A full-stack PXL sample application for tracking your personal projects and side ventures. Never forget about your half-finished projects again!
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A full-stack PXL sample application designed to help developers and creators track their personal projects, side ventures, and brilliant ideas that might otherwise end up on the "shelf". Never forget about your half-finished projects again!
+
+## Motivation
+
+How many great ideas or side projects have you started, only to forget the details, lose the links, or abandon them halfway? Shelfware Tracker provides a simple, centralized place to manage your project portfolio, keeping all the essential information organized and accessible.
 
 ## Overview
 
-Shelfware Tracker helps developers and creators keep track of their side projects, including:
-- Project status (Planning, In Progress, Completed, Abandoned)
-- Project descriptions and details
-- GitHub, deployment, and documentation links
-- Hardware requirements or configurations
+Shelfware Tracker helps you keep tabs on your projects, including:
 
-The application provides a clean, responsive interface for managing your project portfolio, with features for searching, filtering, and organizing your work.
+- Project status (e.g., Planning, In Progress, Completed, Shelved, Abandoned)
+- Descriptions, notes, and key details
+- Links to GitHub repositories, live deployments, and documentation
+- Hardware requirements or specific configurations (stored as JSON)
+
+The application features a clean, responsive interface for managing your projects, with capabilities for searching and filtering.
 
 ## Features
 
-- **Project Management**: Create, view, edit, and delete projects
-- **Status Tracking**: Track the current status of each project
-- **Search & Filter**: Find projects by title or filter by status
-- **Responsive Design**: Use on desktop or mobile devices
-- **Project Details**: Store comprehensive information about each project
-- **Hardware Info**: Keep track of hardware requirements in JSON format
+- **Project Management**: Create, view, edit, and delete projects.
+- **Status Tracking**: Assign and update the status of each project.
+- **Link Storage**: Keep track of relevant URLs (GitHub, Deployed App, Docs).
+- **Hardware Info**: Store structured hardware details using JSON.
+- **Search & Filter**: Easily find projects by title or filter by status (Future Enhancement).
+- **Responsive Design**: Accessible on both desktop and mobile devices.
+- **API**: A clear backend API for data management.
 
 ## Tech Stack
 
 ### Backend
-- Node.js with Express
-- TypeScript
-- Prisma ORM
+- [Node.js](https://nodejs.org/) with [Express](https://expressjs.com/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Prisma ORM](https://www.prisma.io/) for database interaction
+- [Prometheus Client](https://github.com/siimon/prom-client) for metrics
 
 ### Database
-- PostgreSQL database
-- Mariadb (planned)
-- Mongodb (planned)
+- [PostgreSQL](https://www.postgresql.org/)
+- *Planned Support:* MariaDB, MongoDB
 
 ### Frontend
-- React
-- TypeScript
-- React Router for navigation
-- Axios for API communication
-- CSS for styling
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [React Router](https://reactrouter.com/) for navigation
+- [Axios](https://axios-http.com/) for API communication
+- Standard CSS / CSS Modules for styling (or specify your styling library e.g., Tailwind CSS)
 
 ## Project Structure
-
 ```
 shelfware/
-├── backend/             # Express server
+├── backend/              # Node.js/Express API Server
+│   ├── prisma/           # Prisma schema, migrations, seed script
+│   │   ├── migrations/
+│   │   ├── schema.prisma
+│   │   └── seed.ts       # Seeding script
 │   ├── src/
-│   │   ├── server.ts    # Express application
-│   ├── prisma/          # Prisma schema and migrations
-│   └── ...
+│   │   └── server.ts     # Express app setup, routes, middleware
+│   ├── .env.example      # Example environment variables
+│   ├── package.json
+│   └── tsconfig.json
 │
-├── frontend/            # React application
+├── frontend/             # React Frontend Application
+│   ├── public/
 │   ├── src/
-│   │   ├── components/  # Reusable UI components
-│   │   ├── pages/       # Application pages
-│   │   ├── services/    # API services
-│   │   ├── interfaces/  # TypeScript interfaces
-│   │   └── utils/       # Utility functions
-│   └── ...
+│   │   ├── assets/
+│   │   ├── components/   # Reusable UI components
+│   │   ├── hooks/        # Custom React hooks
+│   │   ├── interfaces/   # TypeScript interfaces/types
+│   │   ├── pages/        # Application pages/views
+│   │   ├── services/     # API communication layer (Axios)
+│   │   ├── App.tsx       # Main application component
+│   │   └── main.tsx      # Application entry point
+│   ├── package.json
+│   └── tsconfig.json
+│
+├── compose.yml           # Docker Compose for database (and optionally apps)
+├── .gitignore
+└── README.md
 ```
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js (v14 or later)
-- PostgreSQL database
-- npm or yarn
 
+- [Node.js](https://nodejs.org/) (v18 or later recommended)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) (for database setup)
+- A running PostgreSQL instance (Docker setup provided below)
 
-### Database Setup
+### 1. Database Setup (using Docker)
 
-1. Start the postgresql container:
-   ```bash
-   docker compose up -d
-   ```
+This command starts a PostgreSQL container using the configuration in docker-compose.yml.
 
-### Backend Setup
+```bash
+# Make sure Docker Desktop is running
+docker compose up -d postgres # Or just `docker compose up -d` if postgres is the only service
+```
 
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
+Wait a few seconds for the database container to initialize.
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+### 2. Backend Setup
 
-3. create a `.env` file, e.g.:
-   ```ini
-   DATABASE_URL="postgresql://postgres:postgres@localhost:5432/shelfware?schema=public"
-   BACKEND_PORT=3001
-   CORS_ORIGIN=http://localhost:5173
-   ```
+```bash
+cd backend
 
-4. Initialize and seed the database:
-   ```bash
-   npx prisma db seed
-   ```
+# Install dependencies
+npm install
 
-5. Start the development server:
-   ```bash
-   npm run dev
-   ```
+# Create .env file from example and configure it
+cp .env.example .env
+# --> Edit .env and set your DATABASE_URL, BACKEND_PORT, CORS_ORIGIN etc.
+# Example .env content:
+# DATABASE_URL="postgresql://postgres:postgres@localhost:5432/shelfware?schema=public"
+# BACKEND_PORT=3001
+# CORS_ORIGIN=http://localhost:5173 # Adjust if your frontend runs elsewhere
 
-### Frontend Setup
+# Seed the database with initial data
+npx prisma db seed
 
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
+# Start the development server
+npm run dev
+```
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+The backend should now be running (typically on http://localhost:3001).
 
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
+### 3. Frontend Setup
 
-4. Open your browser to the URL shown in the terminal (typically http://localhost:5173)
+```bash
+cd ../frontend # Navigate back to root, then into frontend
 
-## Screenshots
+# Install dependencies
+npm install
 
-![screenshot](screenshot1.png)
+# Create .env file if needed for frontend variables (e.g., API URL)
+# e.g., VITE_API_BASE_URL=http://localhost:3001
+
+# Start the development server
+npm run dev
+```
+
+The frontend development server will start. Open your browser to the URL shown (typically http://localhost:5173).
+
+### Running the Full Stack with Docker Compose (Optional)
+
+If your compose.yml is configured to build and run the backend and frontend services as well, you might be able to simply run:
+
+```bash
+# From the root directory
+docker compose up --build
+```
+
+This would handle starting the database, backend, and frontend together. Ensure your Dockerfiles and docker-compose.yml are set up correctly for this.
 
 ## API Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET    | /api/projects | Get all projects |
-| GET    | /api/projects/:id | Get project by ID |
-| POST   | /api/projects | Create a new project |
-| PUT    | /api/projects/:id | Update a project |
-| DELETE | /api/projects/:id | Delete a project |
+| GET | /health | Liveness probe (checks if the server is running) |
+| GET | /ready | Readiness probe (checks DB connection, etc.) |
+| GET | /metrics | Exposes application metrics for Prometheus scraping |
+| GET | /api/projects | Get a list of all projects |
+| GET | /api/projects/:id | Get details of a specific project by its ID |
+| POST | /api/projects | Create a new project |
+| PUT | /api/projects/:id | Update an existing project by its ID |
+| DELETE | /api/projects/:id | Delete a project by its ID |
 
-## Project Model
+## Monitoring
+
+- `/health`: Used by orchestrators or monitoring tools to check if the application process is alive (liveness). Returns 200 OK if the server is up.
+- `/ready`: Used to check if the application is ready to accept traffic (readiness), including checking dependencies like the database connection. Returns 200 OK if ready, 503 Service Unavailable otherwise.
+- `/metrics`: Exposes operational metrics (like request counts, latency, memory usage) in a format compatible with Prometheus. Configure Prometheus to scrape this endpoint for monitoring and alerting.
+
+## Project Data Model (Prisma)
+
+The core data structure for a project is defined in `backend/prisma/schema.prisma`. It generally includes fields like:
 
 ```typescript
-interface Project {
-  id: number;
-  title: string;
-  status: 'Planning' | 'In Progress' | 'Completed' | 'Abandoned';
-  description?: string;
-  githubUrl?: string;
-  deployedUrl?: string;
-  docsUrl?: string;
-  hardwareInfo?: any; // JSON data
-  createdAt: Date;
-  updatedAt: Date;
+// backend/prisma/schema.prisma (simplified representation)
+model Project {
+  id          String   @id @default(cuid()) // Or uuid()
+  title       String
+  status      String   // for now
+  description String?
+  githubUrl   String?
+  deployedUrl String?
+  docsUrl     String?
+  hardwareInfo Json?    // Store arbitrary JSON data
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 ```
 
+Note: The frontend might use a slightly different TypeScript interface (e.g., in `frontend/src/interfaces/`) derived from this model.
+
+## Screenshots
+
+## Screenshots
+
+![Screenshot of Shelfware Tracker](screenshot1.png)
+
 ## Future Enhancements
 
-- User authentication for personal project tracking
-- Project tagging/categorization
-- File attachments
-- Task/milestone tracking within projects
-- Team collaboration features
-- Dark mode theme
+- User authentication (e.g., using JWT, OAuth) for personal project lists.
+- Project tagging or categorization for better organization.
+- Advanced filtering and sorting options on the frontend.
+- File attachments per project (e.g., mockups, diagrams).
+- Implement database support for MariaDB and MongoDB.
 
 ## License
 
@@ -169,4 +215,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Author
 
-*[Tom Cool/tomcoolpxl]*
+Tom Cool / tomcoolpxl

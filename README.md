@@ -207,10 +207,6 @@ Note: The frontend might use a slightly different TypeScript interface (e.g., in
 - File attachments per project (e.g., mockups, diagrams).
 - Implement database support for MariaDB and MongoDB.
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## Author
 
 Tom Cool / tomcoolpxl

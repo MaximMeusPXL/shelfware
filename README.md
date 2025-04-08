@@ -67,6 +67,14 @@ shelfware/
 - PostgreSQL database
 - npm or yarn
 
+
+### Database Setup
+
+1. Start the postgresql container:
+   ```bash
+   docker compose up -d
+   ```
+
 ### Backend Setup
 
 1. Navigate to the backend directory:
@@ -79,15 +87,16 @@ shelfware/
    npm install
    ```
 
-3. Create a `.env` file with database connection details:
-   ```
-   DATABASE_URL="postgresql://postgress:pxlpxlpxl@db:5432/shelfware?schema=public"
+3. create a `.env` file, e.g.:
+   ```ini
+   DATABASE_URL="postgresql://postgres:postgres@localhost:5432/shelfware?schema=public"
    BACKEND_PORT=3001
+   CORS_ORIGIN=http://localhost:5173
    ```
 
-4. Run Prisma migrations:
+4. Initialize and seed the database:
    ```bash
-   npx prisma migrate dev
+   npx prisma db seed
    ```
 
 5. Start the development server:

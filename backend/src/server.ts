@@ -3,10 +3,26 @@ import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
 
-const prisma = new PrismaClient();
+// Initialize Prisma client with a fallback connection string if DATABASE_URL is not defined
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL || "postgresql://postgres:postgres@localhost:5432/shelfware?schema=public"
+    }
+  }
+});
 const app = express();
+
+// Parse PORT as a number with default value 3001
 const PORT = parseInt(process.env.BACKEND_PORT || '3001', 10);
-const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
+
+// Default CORS to allow localhost development on common ports
+const CORS_ORIGIN = process.env.CORS_ORIGIN || [
+  'http://localhost:5173', 
+  'http://localhost:5174', 
+  'http://localhost:3000',
+  'http://localhost:3001'
+];
 
 // --- Middlewares ---
 app.use(cors({
@@ -158,4 +174,6 @@ app.delete('/api/projects/:id', (req, res) => {
 // Use 0.0.0.0 to listen on all interfaces - important for Docker
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Backend server running at http://0.0.0.0:${PORT}`);
+  console.log(`Using database: ${process.env.DATABASE_URL || 'Default local PostgreSQL'}`);
+  console.log(`CORS enabled for: ${Array.isArray(CORS_ORIGIN) ? CORS_ORIGIN.join(', ') : CORS_ORIGIN}`);
 });

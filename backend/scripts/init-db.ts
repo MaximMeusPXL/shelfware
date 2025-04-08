@@ -1,6 +1,15 @@
+// OBSOLETE - replaced by prisma/seed.ts
+
 import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+// Initialize Prisma client with a default connection string
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: "postgresql://postgres:postgres@localhost:5432/shelfware?schema=public"
+    }
+  }
+});
 
 // Sample initial project data
 const initialProject = {
@@ -21,11 +30,17 @@ const initialProject = {
 
 async function main() {
   try {
-    console.log('Checking database connection...');
+    console.log('Starting database initialization...');
+    console.log('Using default local database connection');
     
-    // Test database connection
+    // Note: You'll need to run migrations separately:
+    // npx prisma migrate dev --name init
+    console.log('Note: Make sure to run migrations before this script:');
+    console.log('npx prisma migrate dev --name init');
+    
+    // Connect to the database
     await prisma.$connect();
-    console.log('Database connection successful!');
+    console.log('✅ Database connection successful!');
     
     // Check if we already have projects
     const existingProjects = await prisma.project.count();
@@ -40,23 +55,20 @@ async function main() {
       
       console.log(`✅ Initial project created with ID: ${project.id}`);
     } else {
-      console.log(`Found ${existingProjects} existing projects. Skipping seed data.`);
+      console.log(`📋 Found ${existingProjects} existing projects. Skipping seed data.`);
     }
     
-    console.log('Database initialization complete!');
+    console.log('✨ Database initialization complete!');
   } catch (error) {
-    console.error('Database initialization failed:', error);
-    // Use a simpler way to exit
-    throw error;
+    console.error('❌ Database initialization failed:', error);
   } finally {
     await prisma.$disconnect();
+    console.log('Database connection closed.');
   }
 }
 
-main()
-  .catch(e => {
-    console.error(e);
-    // Exit with error code
-    // @ts-ignore
-    if (typeof process !== 'undefined') process.exit(1);
-  });
+main().then(() => {
+  console.log('Script completed');
+}).catch(error => {
+  console.error('Script failed:', error);
+});

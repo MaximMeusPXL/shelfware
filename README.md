@@ -8,6 +8,10 @@ A full-stack PXL sample application designed to help developers and creators tra
 
 How many great ideas or side projects have you started, only to forget the details, lose the links, or abandon them halfway? Shelfware Tracker provides a simple, centralized place to manage your project portfolio, keeping all the essential information organized and accessible.
 
+## Screenshots
+
+![Screenshot of Shelfware Tracker](screenshot1.png)
+
 ## Overview
 
 Shelfware Tracker helps you keep tabs on your projects, including:
@@ -194,12 +198,6 @@ model Project {
 ```
 
 Note: The frontend might use a slightly different TypeScript interface (e.g., in `frontend/src/interfaces/`) derived from this model.
-
-## Screenshots
-
-## Screenshots
-
-![Screenshot of Shelfware Tracker](screenshot1.png)
 
 ## Future Enhancements
 

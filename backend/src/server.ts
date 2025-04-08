@@ -274,12 +274,16 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 // --- Start Server ---
 // Start the Express server and listen for incoming connections.
 // '0.0.0.0' makes the server listen on all available network interfaces (important for Docker).
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Backend server running at http://0.0.0.0:${PORT}`);
-  console.log(`Using database: ${process.env.DATABASE_URL ? 'DATABASE_URL env var' : 'Default local PostgreSQL'}`);
-  console.log(`CORS enabled for: ${Array.isArray(CORS_ORIGIN) ? CORS_ORIGIN.join(', ') : CORS_ORIGIN}`);
-  // Log endpoint URLs for easy access during development.
-  console.log(`Health endpoint: http://localhost:${PORT}/health`);
-  console.log(`Readiness endpoint: http://localhost:${PORT}/ready`);
-  console.log(`Metrics endpoint: http://localhost:${PORT}/metrics`);
-});
+// Only start listening if this module is run directly (i.e. not imported by tests).
+if (require.main === module) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Backend server running at http://0.0.0.0:${PORT}`);
+    console.log(`Using database: ${process.env.DATABASE_URL ? 'DATABASE_URL env var' : 'Default local PostgreSQL'}`);
+    console.log(`CORS enabled for: ${Array.isArray(CORS_ORIGIN) ? CORS_ORIGIN.join(', ') : CORS_ORIGIN}`);
+    console.log(`Health endpoint: http://localhost:${PORT}/health`);
+    console.log(`Readiness endpoint: http://localhost:${PORT}/ready`);
+    console.log(`Metrics endpoint: http://localhost:${PORT}/metrics`);
+  });
+}
+
+export default app;

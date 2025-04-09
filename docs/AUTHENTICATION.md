@@ -1,8 +1,35 @@
 # Authentication System
 
+<!-- vscode-markdown-toc -->
+* [Overview](#Overview)
+* [Setup](#Setup)
+	* [1. Environment Variables](#EnvironmentVariables)
+* [Backend Implementation](#BackendImplementation)
+	* [Database Schema](#DatabaseSchema)
+	* [Authentication Configuration](#AuthenticationConfiguration)
+	* [Auth Routes](#AuthRoutes)
+	* [Authentication Middleware](#AuthenticationMiddleware)
+	* [API Routes Protection](#APIRoutesProtection)
+* [Frontend Implementation](#FrontendImplementation)
+	* [Authentication Service](#AuthenticationService)
+	* [Authentication Context](#AuthenticationContext)
+	* [Protected Routes](#ProtectedRoutes)
+* [Security Considerations](#SecurityConsiderations)
+* [Usage Examples](#UsageExamples)
+	* [Protect a Route in React](#ProtectaRouteinReact)
+	* [Access Authentication State in a Component](#AccessAuthenticationStateinaComponent)
+* [Troubleshooting](#Troubleshooting)
+	* [Common Issues](#CommonIssues)
+
+<!-- vscode-markdown-toc-config
+	numbering=false
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+
 This document explains the implementation of token-based authentication in the PXL Shelfware Tracker application.
 
-## Overview
+## <a name='Overview'></a>Overview
 
 The authentication system is built using:
 - **Passport.js**: Authentication middleware for Node.js
@@ -10,9 +37,9 @@ The authentication system is built using:
 - **bcrypt**: For password hashing
 - **React Context API**: For managing authentication state on the frontend
 
-## Setup
+## <a name='Setup'></a>Setup
 
-### 1. Environment Variables
+### <a name='EnvironmentVariables'></a>1. Environment Variables
 
 Add the following to your backend `.env` file:
 
@@ -23,9 +50,9 @@ JWT_SECRET="your-secure-random-string"
 
 For production, generate a unique secure random string for JWT_SECRET.
 
-## Backend Implementation
+## <a name='BackendImplementation'></a>Backend Implementation
 
-### Database Schema
+### <a name='DatabaseSchema'></a>Database Schema
 
 The User and Project models are linked in a one-to-many relationship:
 
@@ -49,7 +76,7 @@ model Project {
 }
 ```
 
-### Authentication Configuration
+### <a name='AuthenticationConfiguration'></a>Authentication Configuration
 
 The authentication system uses two Passport.js strategies:
 1. **Local Strategy**: For email/password login
@@ -57,7 +84,7 @@ The authentication system uses two Passport.js strategies:
 
 The configuration is in `backend/src/config/passport.ts`.
 
-### Auth Routes
+### <a name='AuthRoutes'></a>Auth Routes
 
 | Method | Endpoint | Description | Request Body | Response |
 |--------|----------|-------------|--------------|----------|
@@ -67,7 +94,7 @@ The configuration is in `backend/src/config/passport.ts`.
 
 The authentication controller is defined in `backend/src/controllers/authController.ts`.
 
-### Authentication Middleware
+### <a name='AuthenticationMiddleware'></a>Authentication Middleware
 
 Two middleware functions are available:
 1. `requireAuth`: Requires a valid JWT token to access a route
@@ -96,7 +123,7 @@ export const requireAuth = (req: Request, res: Response, next: NextFunction) => 
 };
 ```
 
-### API Routes Protection
+### <a name='APIRoutesProtection'></a>API Routes Protection
 
 The routes are protected as follows:
 - `GET /api/projects`: Uses `optionalAuth` - if authenticated, returns only the user's projects
@@ -105,9 +132,9 @@ The routes are protected as follows:
 - `PUT /api/projects/:id`: Uses `requireAuth` - checks project ownership
 - `DELETE /api/projects/:id`: Uses `requireAuth` - checks project ownership
 
-## Frontend Implementation
+## <a name='FrontendImplementation'></a>Frontend Implementation
 
-### Authentication Service
+### <a name='AuthenticationService'></a>Authentication Service
 
 The `authService.ts` file provides functions for:
 - User registration
@@ -131,7 +158,7 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
 };
 ```
 
-### Authentication Context
+### <a name='AuthenticationContext'></a>Authentication Context
 
 The `AuthContext.tsx` provides a React context that:
 - Tracks authentication state
@@ -183,7 +210,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 };
 ```
 
-### Protected Routes
+### <a name='ProtectedRoutes'></a>Protected Routes
 
 The `ProtectedRoute.tsx` component:
 - Checks if a user is authenticated
@@ -207,7 +234,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 };
 ```
 
-## Security Considerations
+## <a name='SecurityConsiderations'></a>Security Considerations
 
 1. **Password Security**:
    - Passwords are hashed using bcrypt with a cost factor of 10
@@ -223,9 +250,9 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
    - Ownership checks ensure users can only access their own projects
    - Input validation prevents security issues
 
-## Usage Examples
+## <a name='UsageExamples'></a>Usage Examples
 
-### Protect a Route in React
+### <a name='ProtectaRouteinReact'></a>Protect a Route in React
 
 ```tsx
 // In App.tsx or route definitions
@@ -236,7 +263,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 } />
 ```
 
-### Access Authentication State in a Component
+### <a name='AccessAuthenticationStateinaComponent'></a>Access Authentication State in a Component
 
 ```tsx
 import { useAuth } from '../context/AuthContext';
@@ -255,9 +282,9 @@ const MyComponent = () => {
 };
 ```
 
-## Troubleshooting
+## <a name='Troubleshooting'></a>Troubleshooting
 
-### Common Issues
+### <a name='CommonIssues'></a>Common Issues
 
 1. **"Invalid token" errors**:
    - Check that JWT_SECRET matches the one used to generate tokens

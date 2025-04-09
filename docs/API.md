@@ -1,8 +1,38 @@
 # API Documentation
 
+<!-- vscode-markdown-toc -->
+* [Base URL](#BaseURL)
+* [Authentication](#Authentication)
+* [Response Format](#ResponseFormat)
+* [Authentication Endpoints](#AuthenticationEndpoints)
+	* [Register User](#RegisterUser)
+	* [Login](#Login)
+	* [Get User Profile](#GetUserProfile)
+* [Project Endpoints](#ProjectEndpoints)
+	* [Get All Projects](#GetAllProjects)
+	* [Get Project by ID](#GetProjectbyID)
+	* [Create Project](#CreateProject)
+	* [Update Project](#UpdateProject)
+	* [Delete Project](#DeleteProject)
+* [Health & Monitoring Endpoints](#HealthMonitoringEndpoints)
+	* [Health Check](#HealthCheck)
+	* [Readiness Check](#ReadinessCheck)
+	* [Metrics](#Metrics)
+* [Status Codes](#StatusCodes)
+* [Examples](#Examples)
+	* [curl Examples](#curlExamples)
+
+<!-- vscode-markdown-toc-config
+	numbering=false
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+
 This document provides a comprehensive reference for the PXL Shelfware Tracker API endpoints.
 
-## Base URL
+
+
+## <a name='BaseURL'></a>Base URL
 
 All API endpoints are relative to:
 
@@ -12,7 +42,7 @@ http://localhost:3001/api
 
 For production, this would be your deployed API URL.
 
-## Authentication
+## <a name='Authentication'></a>Authentication
 
 Most endpoints require authentication using JWT tokens. To authenticate:
 
@@ -22,7 +52,7 @@ Most endpoints require authentication using JWT tokens. To authenticate:
    Authorization: Bearer YOUR_JWT_TOKEN
    ```
 
-## Response Format
+## <a name='ResponseFormat'></a>Response Format
 
 All responses are in JSON format.
 
@@ -44,9 +74,9 @@ All responses are in JSON format.
 }
 ```
 
-## Authentication Endpoints
+## <a name='AuthenticationEndpoints'></a>Authentication Endpoints
 
-### Register User
+### <a name='RegisterUser'></a>Register User
 
 Creates a new user account and returns a JWT token.
 
@@ -79,7 +109,7 @@ POST /auth/register
 - `400 Bad Request`: Email or password missing
 - `400 Bad Request`: Email already in use
 
-### Login
+### <a name='Login'></a>Login
 
 Authenticates a user and returns a JWT token.
 
@@ -110,7 +140,7 @@ POST /auth/login
 **Error Responses**
 - `401 Unauthorized`: Invalid credentials
 
-### Get User Profile
+### <a name='GetUserProfile'></a>Get User Profile
 
 Returns the authenticated user's profile.
 
@@ -135,9 +165,9 @@ Authorization: Bearer YOUR_JWT_TOKEN
 **Error Responses**
 - `401 Unauthorized`: Missing or invalid token
 
-## Project Endpoints
+## <a name='ProjectEndpoints'></a>Project Endpoints
 
-### Get All Projects
+### <a name='GetAllProjects'></a>Get All Projects
 
 For authenticated users, returns only their projects. 
 
@@ -173,7 +203,7 @@ Authorization: Bearer YOUR_JWT_TOKEN
 ]
 ```
 
-### Get Project by ID
+### <a name='GetProjectbyID'></a>Get Project by ID
 
 Returns a specific project. Authentication is required, and users can only access their own projects.
 
@@ -211,7 +241,7 @@ Authorization: Bearer YOUR_JWT_TOKEN
 - `403 Forbidden`: Not authorized to access this project
 - `404 Not Found`: Project not found
 
-### Create Project
+### <a name='CreateProject'></a>Create Project
 
 Creates a new project for the authenticated user.
 
@@ -264,7 +294,7 @@ Authorization: Bearer YOUR_JWT_TOKEN
 - `400 Bad Request`: Missing required fields (title and status)
 - `401 Unauthorized`: Not authenticated
 
-### Update Project
+### <a name='UpdateProject'></a>Update Project
 
 Updates an existing project. Authentication is required, and users can only update their own projects.
 
@@ -319,7 +349,7 @@ Authorization: Bearer YOUR_JWT_TOKEN
 - `403 Forbidden`: Not authorized to modify this project
 - `404 Not Found`: Project not found
 
-### Delete Project
+### <a name='DeleteProject'></a>Delete Project
 
 Deletes a project. Authentication is required, and users can only delete their own projects.
 
@@ -340,9 +370,9 @@ No response body is returned on successful deletion.
 - `403 Forbidden`: Not authorized to delete this project
 - `404 Not Found`: Project not found
 
-## Health & Monitoring Endpoints
+## <a name='HealthMonitoringEndpoints'></a>Health & Monitoring Endpoints
 
-### Health Check
+### <a name='HealthCheck'></a>Health Check
 
 Checks if the application is running.
 
@@ -357,7 +387,7 @@ GET /health
 }
 ```
 
-### Readiness Check
+### <a name='ReadinessCheck'></a>Readiness Check
 
 Checks if the application is ready to handle requests (including database connection).
 
@@ -386,7 +416,7 @@ GET /ready
 }
 ```
 
-### Metrics
+### <a name='Metrics'></a>Metrics
 
 Exposes Prometheus metrics for monitoring.
 
@@ -397,7 +427,7 @@ GET /metrics
 **Response (200 OK)**
 Returns Prometheus-formatted metrics.
 
-## Status Codes
+## <a name='StatusCodes'></a>Status Codes
 
 | Status Code | Description |
 |-------------|-------------|
@@ -411,9 +441,9 @@ Returns Prometheus-formatted metrics.
 | 500 | Internal Server Error - Something went wrong on the server |
 | 503 | Service Unavailable - Service temporary unavailable (e.g., database down) |
 
-## Examples
+## <a name='Examples'></a>Examples
 
-### curl Examples
+### <a name='curlExamples'></a>curl Examples
 
 Register a user:
 ```bash

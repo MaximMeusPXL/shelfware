@@ -4,6 +4,8 @@
 
 A full-stack application designed to help developers and creators track their personal projects, side ventures, and brilliant ideas that might otherwise end up on the "shelf". Never forget about your half-finished projects again!
 
+![Screenshot](assets/screenshot1.png)
+
 ## Motivation
 
 How many great ideas or side projects have you started, only to forget the details, lose the links, or abandon them halfway? Shelfware Tracker provides a simple, centralized place to manage your project portfolio, keeping all the essential information organized and accessible.

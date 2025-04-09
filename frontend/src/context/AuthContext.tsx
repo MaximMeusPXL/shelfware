@@ -1,6 +1,6 @@
 // frontend/src/context/AuthContext.tsx
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
-import { User, getToken, removeToken, getCurrentUser, isAuthenticated } from '../services/authService';
+import { User, removeToken, getCurrentUser, isAuthenticated } from '../services/authService';
 
 interface AuthContextType {
   user: User | null;

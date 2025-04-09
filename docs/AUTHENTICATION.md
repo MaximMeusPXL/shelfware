@@ -1,31 +1,25 @@
 # Authentication System
 
-<!-- vscode-markdown-toc -->
-* [Overview](#Overview)
-* [Setup](#Setup)
-	* [1. Environment Variables](#EnvironmentVariables)
-* [Backend Implementation](#BackendImplementation)
-	* [Database Schema](#DatabaseSchema)
-	* [Authentication Configuration](#AuthenticationConfiguration)
-	* [Auth Routes](#AuthRoutes)
-	* [Authentication Middleware](#AuthenticationMiddleware)
-	* [API Routes Protection](#APIRoutesProtection)
-* [Frontend Implementation](#FrontendImplementation)
-	* [Authentication Service](#AuthenticationService)
-	* [Authentication Context](#AuthenticationContext)
-	* [Protected Routes](#ProtectedRoutes)
-* [Security Considerations](#SecurityConsiderations)
-* [Usage Examples](#UsageExamples)
-	* [Protect a Route in React](#ProtectaRouteinReact)
-	* [Access Authentication State in a Component](#AccessAuthenticationStateinaComponent)
-* [Troubleshooting](#Troubleshooting)
-	* [Common Issues](#CommonIssues)
+- [Overview](#overview)
+- [Setup](#setup)
+  - [1. Environment Variables](#1-environment-variables)
+- [Backend Implementation](#backend-implementation)
+  - [Database Schema](#database-schema)
+  - [Authentication Configuration](#authentication-configuration)
+  - [Auth Routes](#auth-routes)
+  - [Authentication Middleware](#authentication-middleware)
+  - [API Routes Protection](#api-routes-protection)
+- [Frontend Implementation](#frontend-implementation)
+  - [Authentication Service](#authentication-service)
+  - [Authentication Context](#authentication-context)
+  - [Protected Routes](#protected-routes)
+- [Security Considerations](#security-considerations)
+- [Usage Examples](#usage-examples)
+  - [Protect a Route in React](#protect-a-route-in-react)
+  - [Access Authentication State in a Component](#access-authentication-state-in-a-component)
+- [Troubleshooting](#troubleshooting)
+  - [Common Issues](#common-issues)
 
-<!-- vscode-markdown-toc-config
-	numbering=false
-	autoSave=true
-	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc -->
 
 This document explains the implementation of token-based authentication in the PXL Shelfware Tracker application.
 

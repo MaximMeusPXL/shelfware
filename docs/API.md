@@ -1,36 +1,28 @@
 # API Documentation
 
-<!-- vscode-markdown-toc -->
-* [Base URL](#BaseURL)
-* [Authentication](#Authentication)
-* [Response Format](#ResponseFormat)
-* [Authentication Endpoints](#AuthenticationEndpoints)
-	* [Register User](#RegisterUser)
-	* [Login](#Login)
-	* [Get User Profile](#GetUserProfile)
-* [Project Endpoints](#ProjectEndpoints)
-	* [Get All Projects](#GetAllProjects)
-	* [Get Project by ID](#GetProjectbyID)
-	* [Create Project](#CreateProject)
-	* [Update Project](#UpdateProject)
-	* [Delete Project](#DeleteProject)
-* [Health & Monitoring Endpoints](#HealthMonitoringEndpoints)
-	* [Health Check](#HealthCheck)
-	* [Readiness Check](#ReadinessCheck)
-	* [Metrics](#Metrics)
-* [Status Codes](#StatusCodes)
-* [Examples](#Examples)
-	* [curl Examples](#curlExamples)
+- [Base URL](#base-url)
+- [Authentication](#authentication)
+- [Response Format](#response-format)
+- [Authentication Endpoints](#authentication-endpoints)
+  - [Register User](#register-user)
+  - [Login](#login)
+  - [Get User Profile](#get-user-profile)
+- [Project Endpoints](#project-endpoints)
+  - [Get All Projects](#get-all-projects)
+  - [Get Project by ID](#get-project-by-id)
+  - [Create Project](#create-project)
+  - [Update Project](#update-project)
+  - [Delete Project](#delete-project)
+- [Health \& Monitoring Endpoints](#health--monitoring-endpoints)
+  - [Health Check](#health-check)
+  - [Readiness Check](#readiness-check)
+  - [Metrics](#metrics)
+- [Status Codes](#status-codes)
+- [Examples](#examples)
+  - [curl Examples](#curl-examples)
 
-<!-- vscode-markdown-toc-config
-	numbering=false
-	autoSave=true
-	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc -->
 
 This document provides a comprehensive reference for the PXL Shelfware Tracker API endpoints.
-
-
 
 ## <a name='BaseURL'></a>Base URL
 

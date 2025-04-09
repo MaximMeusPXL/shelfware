@@ -1,5 +1,13 @@
 # Testing Guide
 
+- [Overview](#overview)
+- [Running Tests](#running-tests)
+  - [Backend Tests](#backend-tests)
+- [Test Structure](#test-structure)
+- [Mock Strategy](#mock-strategy)
+  - [Mocking Prisma](#mocking-prisma)
+
+
 This document explains how to run and write tests for the PXL Shelfware Tracker application, including testing with authentication.
 
 ## Overview

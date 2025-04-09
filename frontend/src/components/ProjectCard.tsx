@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Project } from '../interfaces/Project.ts';
-import { formatDate, getStatusColor, formatHardwareInfo } from '../utils/formatters.ts';
+import { formatDate, getStatusColor } from '../utils/formatters.ts';
+import { useAuth } from '../context/AuthContext';
 import './ProjectCard.css';
 
 interface ProjectCardProps {
@@ -11,6 +12,7 @@ interface ProjectCardProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete }) => {
   const [isComponentsExpanded, setIsComponentsExpanded] = useState(false);
+  const { isAuthenticated } = useAuth();
   
   const statusStyle = {
     backgroundColor: getStatusColor(project.status)
@@ -136,15 +138,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete }) => {
         <Link to={`/project/${project.id}`} className="btn btn-view">
           View Details
         </Link>
-        <Link to={`/edit/${project.id}`} className="btn btn-edit">
-          Edit
-        </Link>
-        <button 
-          onClick={() => onDelete(project.id)} 
-          className="btn btn-delete"
-        >
-          Delete
-        </button>
+        
+        {isAuthenticated && (
+          <>
+            <Link to={`/edit/${project.id}`} className="btn btn-edit">
+              Edit
+            </Link>
+            <button 
+              onClick={() => onDelete(project.id)} 
+              className="btn btn-delete"
+            >
+              Delete
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

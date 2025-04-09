@@ -5,6 +5,7 @@ import LoadingSpinner from '../components/LoadingSpinner.tsx';
 import ConfirmDialog from '../components/ConfirmDialog.tsx';
 import { getProjects, deleteProject } from '../services/projectService.ts';
 import { Project } from '../interfaces/Project.ts';
+import { useAuth } from '../context/AuthContext';
 import './ProjectsOverview.css';
 
 const ProjectsOverview: React.FC = () => {
@@ -15,10 +16,17 @@ const ProjectsOverview: React.FC = () => {
   const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
+  
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
-    fetchProjects();
-  }, []);
+    if (isAuthenticated) {
+      fetchProjects();
+    } else {
+      setProjects([]);
+      setLoading(false);
+    }
+  }, [isAuthenticated]);
 
   const fetchProjects = async () => {
     try {
@@ -70,6 +78,16 @@ const ProjectsOverview: React.FC = () => {
 
   if (loading) return <LoadingSpinner message="Loading projects..." />;
 
+  if (!isAuthenticated) {
+    return (
+      <div className="projects-overview">
+        <div className="auth-prompt">
+          <p>Please <Link to="/login">login</Link> or <Link to="/register">register</Link> to start tracking your projects.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="projects-overview">
       <div className="overview-header">
@@ -109,12 +127,10 @@ const ProjectsOverview: React.FC = () => {
 
       {filteredProjects.length === 0 ? (
         <div className="empty-state">
-          <p>No projects found. {projects.length > 0 ? 'Try adjusting your filters.' : 'Get started by adding your first project.'}</p>
-          {projects.length === 0 && (
-            <Link to="/create" className="empty-add-button">
-              Add Project
-            </Link>
-          )}
+          <p>No projects found. Get started by adding your first project!</p>
+          <Link to="/create" className="empty-add-button">
+            Add Project
+          </Link>
         </div>
       ) : (
         <div className="projects-grid">

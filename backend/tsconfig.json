@@ -10,5 +10,6 @@
       "types": ["node", "jest"]
     },
     "files": ["./src/server.ts"],
-    "include": ["src", "tests"]
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "include": ["src", "tests", "express"]
   }

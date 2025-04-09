@@ -1,0 +1,69 @@
+"filename", "language", "YAML", "TypeScript", "JavaScript", "Properties", "JSON", "JSON with Comments", "Markdown", "XML", "TypeScript JSX", "CSS", "Docker", "HTML", "MS SQL", "comment", "blank", "total"
+"c:\Users\thraa\github\shelfware\README.md", "Markdown", 0, 0, 0, 0, 0, 0, 159, 0, 0, 0, 0, 0, 0, 0, 54, 213
+"c:\Users\thraa\github\shelfware\backend\Dockerfile", "Docker", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 7, 27
+"c:\Users\thraa\github\shelfware\backend\jest.config.js", "JavaScript", 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6
+"c:\Users\thraa\github\shelfware\backend\package-lock.json", "JSON", 0, 0, 0, 0, 6970, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6971
+"c:\Users\thraa\github\shelfware\backend\package.json", "JSON", 0, 0, 0, 0, 53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 54
+"c:\Users\thraa\github\shelfware\backend\prisma\migrations\20250406210158_initial_project_schema\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 1, 2, 16
+"c:\Users\thraa\github\shelfware\backend\prisma\migrations\20250409101557_add_user_model\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 4, 5, 21
+"c:\Users\thraa\github\shelfware\backend\prisma\seed-users.ts", "TypeScript", 0, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 10, 63
+"c:\Users\thraa\github\shelfware\backend\prisma\seed.ts", "TypeScript", 0, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 8, 89
+"c:\Users\thraa\github\shelfware\backend\scripts\init-db.ts", "TypeScript", 0, 54, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 12, 74
+"c:\Users\thraa\github\shelfware\backend\src\config\passport.ts", "TypeScript", 0, 53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 9, 70
+"c:\Users\thraa\github\shelfware\backend\src\controllers\authController.ts", "TypeScript", 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 17, 92
+"c:\Users\thraa\github\shelfware\backend\src\middleware\authMiddleware.ts", "TypeScript", 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 6, 38
+"c:\Users\thraa\github\shelfware\backend\src\routes\authRoutes.ts", "TypeScript", 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 17
+"c:\Users\thraa\github\shelfware\backend\src\server.ts", "TypeScript", 0, 223, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 37, 292
+"c:\Users\thraa\github\shelfware\backend\src\types\index.ts", "TypeScript", 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 18
+"c:\Users\thraa\github\shelfware\backend\tests\auth.test.ts", "TypeScript", 0, 147, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 25, 184
+"c:\Users\thraa\github\shelfware\backend\tests\server.test.ts", "TypeScript", 0, 302, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22, 48, 372
+"c:\Users\thraa\github\shelfware\backend\tsconfig.json", "JSON with Comments", 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15
+"c:\Users\thraa\github\shelfware\compose.yml", "YAML", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 17
+"c:\Users\thraa\github\shelfware\frontend\Dockerfile", "Docker", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 5, 19
+"c:\Users\thraa\github\shelfware\frontend\README.md", "Markdown", 0, 0, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 0, 10, 55
+"c:\Users\thraa\github\shelfware\frontend\eslint.config.js", "JavaScript", 0, 0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 29
+"c:\Users\thraa\github\shelfware\frontend\index.html", "HTML", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 1, 14
+"c:\Users\thraa\github\shelfware\frontend\nginx.conf", "Properties", 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 33
+"c:\Users\thraa\github\shelfware\frontend\package-lock.json", "JSON", 0, 0, 0, 0, 3640, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3641
+"c:\Users\thraa\github\shelfware\frontend\package.json", "JSON", 0, 0, 0, 0, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 34
+"c:\Users\thraa\github\shelfware\frontend\public\vite.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
+"c:\Users\thraa\github\shelfware\frontend\src\App.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 260, 0, 0, 0, 40, 42, 342
+"c:\Users\thraa\github\shelfware\frontend\src\App.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 69, 0, 0, 0, 0, 2, 5, 76
+"c:\Users\thraa\github\shelfware\frontend\src\assets\react.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
+"c:\Users\thraa\github\shelfware\frontend\src\components\ConfirmDialog.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 0, 0, 0, 0, 10, 77
+"c:\Users\thraa\github\shelfware\frontend\src\components\ConfirmDialog.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 41, 0, 0, 0, 0, 0, 4, 45
+"c:\Users\thraa\github\shelfware\frontend\src\components\LoadingSpinner.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, 3, 28
+"c:\Users\thraa\github\shelfware\frontend\src\components\LoadingSpinner.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 3, 17
+"c:\Users\thraa\github\shelfware\frontend\src\components\Navbar.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 98, 0, 0, 0, 3, 18, 119
+"c:\Users\thraa\github\shelfware\frontend\src\components\Navbar.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 56, 0, 0, 0, 0, 1, 7, 64
+"c:\Users\thraa\github\shelfware\frontend\src\components\ProjectCard.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 210, 0, 0, 0, 1, 36, 247
+"c:\Users\thraa\github\shelfware\frontend\src\components\ProjectCard.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 135, 0, 0, 0, 0, 5, 20, 160
+"c:\Users\thraa\github\shelfware\frontend\src\components\ProtectedRoute.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 5, 6, 30
+"c:\Users\thraa\github\shelfware\frontend\src\components\ThemeToggle.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 37, 0, 0, 0, 0, 2, 5, 44
+"c:\Users\thraa\github\shelfware\frontend\src\context\AuthContext.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 66, 0, 0, 0, 0, 9, 11, 86
+"c:\Users\thraa\github\shelfware\frontend\src\index.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 61, 0, 0, 0, 0, 8, 69
+"c:\Users\thraa\github\shelfware\frontend\src\interfaces\Project.ts", "TypeScript", 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 35
+"c:\Users\thraa\github\shelfware\frontend\src\main.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 2, 11
+"c:\Users\thraa\github\shelfware\frontend\src\pages\AboutPage.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 109, 0, 0, 0, 1, 22, 132
+"c:\Users\thraa\github\shelfware\frontend\src\pages\AboutPage.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 6, 86
+"c:\Users\thraa\github\shelfware\frontend\src\pages\AuthForms.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 99, 0, 0, 0, 2, 16, 117
+"c:\Users\thraa\github\shelfware\frontend\src\pages\CreateProject.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 200, 0, 0, 0, 0, 6, 25, 231
+"c:\Users\thraa\github\shelfware\frontend\src\pages\EditProject.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 234, 0, 0, 0, 0, 7, 32, 273
+"c:\Users\thraa\github\shelfware\frontend\src\pages\Login.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 84, 0, 0, 0, 0, 2, 14, 100
+"c:\Users\thraa\github\shelfware\frontend\src\pages\Profile.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 1, 11, 75
+"c:\Users\thraa\github\shelfware\frontend\src\pages\Profile.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 1, 10, 91
+"c:\Users\thraa\github\shelfware\frontend\src\pages\ProjectDetails.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 179, 0, 0, 0, 0, 35, 214
+"c:\Users\thraa\github\shelfware\frontend\src\pages\ProjectDetails.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 206, 0, 0, 0, 0, 3, 25, 234
+"c:\Users\thraa\github\shelfware\frontend\src\pages\ProjectForm.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 174, 0, 0, 0, 1, 34, 209
+"c:\Users\thraa\github\shelfware\frontend\src\pages\ProjectsOverview.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 138, 0, 0, 0, 2, 25, 165
+"c:\Users\thraa\github\shelfware\frontend\src\pages\ProjectsOverview.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 137, 0, 0, 0, 0, 1, 20, 158
+"c:\Users\thraa\github\shelfware\frontend\src\pages\Register.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 112, 0, 0, 0, 0, 2, 16, 130
+"c:\Users\thraa\github\shelfware\frontend\src\services\authService.ts", "TypeScript", 0, 71, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 16, 99
+"c:\Users\thraa\github\shelfware\frontend\src\services\projectService.ts", "TypeScript", 0, 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 8, 48
+"c:\Users\thraa\github\shelfware\frontend\src\utils\formatters.ts", "TypeScript", 0, 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 7, 63
+"c:\Users\thraa\github\shelfware\frontend\src\vite-env.d.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2
+"c:\Users\thraa\github\shelfware\frontend\tsconfig.app.json", "JSON", 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 27
+"c:\Users\thraa\github\shelfware\frontend\tsconfig.json", "JSON with Comments", 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 1, 8
+"c:\Users\thraa\github\shelfware\frontend\tsconfig.node.json", "JSON", 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 25
+"c:\Users\thraa\github\shelfware\frontend\vite.config.ts", "TypeScript", 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 12
+"Total", "-", 14, 1210, 32, 24, 10738, 22, 204, 2, 1579, 1483, 0, 13, 25, 289, 790, 16425

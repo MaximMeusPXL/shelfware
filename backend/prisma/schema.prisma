@@ -8,16 +8,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  projects  Project[]
+}
+
 model Project {
-  id          String   @id @default(cuid()) // Using cuid for unique IDs
+  id          String   @id @default(cuid())
   title       String
-  description String? // Optional field
-  status      String   // e.g., "idea", "started", "paused", "finished", "abandoned"
+  description String?
+  status      String
   githubUrl   String?
   deployedUrl String?
   docsUrl     String?
-  hardwareInfo Json?    // Store hardware list as JSON [{name: string, link?: string}]
+  hardwareInfo Json?
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  
+  // New relation to User
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
 }

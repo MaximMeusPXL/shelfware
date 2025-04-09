@@ -5,6 +5,7 @@ import { Project } from '../interfaces/Project.ts';
 import { formatDate, getStatusColor, formatHardwareInfo } from '../utils/formatters.ts';
 import LoadingSpinner from '../components/LoadingSpinner.tsx';
 import ConfirmDialog from '../components/ConfirmDialog.tsx';
+import { useAuth } from '../context/AuthContext';
 import './ProjectDetails.css';
 
 const ProjectDetails: React.FC = () => {
@@ -14,6 +15,8 @@ const ProjectDetails: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -21,7 +24,6 @@ const ProjectDetails: React.FC = () => {
       
       try {
         setLoading(true);
-        // Don't parse the ID as an integer, use it directly as a string
         const data = await getProjectById(id);
         setProject(data);
       } catch (err) {
@@ -43,7 +45,6 @@ const ProjectDetails: React.FC = () => {
     if (!id) return;
     
     try {
-      // Don't parse the ID as an integer, use it directly as a string
       await deleteProject(id);
       navigate('/');
     } catch (err) {
@@ -82,17 +83,19 @@ const ProjectDetails: React.FC = () => {
           &larr; Back to Projects
         </Link>
         
-        <div className="details-actions">
-          <Link to={`/edit/${project.id}`} className="edit-button">
-            Edit Project
-          </Link>
-          <button 
-            onClick={handleDeleteClick}
-            className="delete-button"
-          >
-            Delete Project
-          </button>
-        </div>
+        {isAuthenticated && (
+          <div className="details-actions">
+            <Link to={`/edit/${project.id}`} className="edit-button">
+              Edit Project
+            </Link>
+            <button 
+              onClick={handleDeleteClick}
+              className="delete-button"
+            >
+              Delete Project
+            </button>
+          </div>
+        )}
       </div>
       
       <div className="project-details-card">

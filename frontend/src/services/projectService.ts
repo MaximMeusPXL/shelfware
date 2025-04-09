@@ -1,18 +1,20 @@
-import axios from 'axios';
+// frontend/src/services/projectService.ts
 import { Project, ProjectFormData } from '../interfaces/Project';
+import { authAxios } from './authService';
 
 // Get the API URL from environment variables or use a default for development
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/projects';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+const PROJECTS_URL = `${API_URL}/projects`;
 
-// Get all projects
+// Get all projects - uses the authenticated axios instance
 export const getProjects = async (): Promise<Project[]> => {
-  const response = await axios.get(API_URL);
+  const response = await authAxios.get(PROJECTS_URL);
   return response.data;
 };
 
 // Get a single project by ID
 export const getProjectById = async (id: string): Promise<Project> => {
-  const response = await axios.get(`${API_URL}/${id}`);
+  const response = await authAxios.get(`${PROJECTS_URL}/${id}`);
   return response.data;
 };
 
@@ -24,7 +26,7 @@ export const createProject = async (projectData: ProjectFormData): Promise<Proje
     hardwareInfo: projectData.hardwareInfo ? JSON.parse(projectData.hardwareInfo) : undefined
   };
   
-  const response = await axios.post(API_URL, processedData);
+  const response = await authAxios.post(PROJECTS_URL, processedData);
   return response.data;
 };
 
@@ -36,11 +38,11 @@ export const updateProject = async (id: string, projectData: ProjectFormData): P
     hardwareInfo: projectData.hardwareInfo ? JSON.parse(projectData.hardwareInfo) : undefined
   };
   
-  const response = await axios.put(`${API_URL}/${id}`, processedData);
+  const response = await authAxios.put(`${PROJECTS_URL}/${id}`, processedData);
   return response.data;
 };
 
 // Delete a project
 export const deleteProject = async (id: string): Promise<void> => {
-  await axios.delete(`${API_URL}/${id}`);
+  await authAxios.delete(`${PROJECTS_URL}/${id}`);
 };

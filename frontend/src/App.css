@@ -162,10 +162,9 @@ a:hover {
 .logo-text {
   font-size: 1.5rem;
   font-weight: bold;
-  font-size: 2.4rem;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  position: static; /* instead of absolute */
+  left: auto; /* instead of 50% */
+  transform: none; /* instead of translateX(-50%) */
   white-space: nowrap;
 }
 

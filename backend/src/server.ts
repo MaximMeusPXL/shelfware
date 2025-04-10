@@ -59,32 +59,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-/*
-// Define allowed origins for CORS
-const CORS_ORIGIN = [
-  'http://localhost:5173',
-  'http://localhost:5174', 
-  'http://localhost:3000',
-  'http://localhost:3001',
-  'http://localhost:8080',
-  'http://frontend:80'
-];
-
-// --- Middlewares ---
-app.use(cors({
-  origin: function(origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl requests)
-    if (!origin) return callback(null, true);
-    
-    if (CORS_ORIGIN.includes(origin)) {
-      callback(null, origin);
-    } else {
-      callback(null, CORS_ORIGIN[0]); // Default to first origin if not matched
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-})); */
 app.use(express.json());
 
 // Initialize Passport

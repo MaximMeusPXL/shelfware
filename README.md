@@ -22,6 +22,38 @@ How many great ideas or side projects have you started, only to forget the detai
 - ✅ Responsive design (desktop and mobile)
 - ✅ Light/dark theme
 
+## Contents
+
+- [Motivation](#motivation)
+- [Features](#features)
+- [Contents](#contents)
+- [Tech Stack](#tech-stack)
+  - [Backend](#backend)
+  - [Database](#database)
+  - [Frontend](#frontend)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [1. Database Setup](#1-database-setup)
+  - [2. Backend Setup](#2-backend-setup)
+  - [3. Frontend Setup](#3-frontend-setup)
+  - [4. Verifying Setup](#4-verifying-setup)
+- [Authentication](#authentication)
+- [API Endpoints](#api-endpoints)
+  - [Authentication Endpoints](#authentication-endpoints)
+  - [Project Endpoints](#project-endpoints)
+  - [Health \& Monitoring](#health--monitoring)
+- [Testing the API](#testing-the-api)
+  - [Using cURL](#using-curl)
+- [Project Structure](#project-structure)
+- [Dependency Information](#dependency-information)
+  - [Backend Dependencies](#backend-dependencies)
+  - [Frontend Dependencies](#frontend-dependencies)
+- [Documentation](#documentation)
+- [Running Tests](#running-tests)
+  - [Backend Tests](#backend-tests)
+- [License](#license)
+
+
 ## Tech Stack
 
 ### Backend

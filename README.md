@@ -137,11 +137,8 @@ npx prisma generate
 # Run database migrations
 npx prisma migrate dev
 
-# Initialize the database
-npm run init-db
-
-# Add test users (optional but recommended)
-npm run seed-users
+# Seed the database with demo data
+npm run seed
 
 # Start the development server
 npm run dev
@@ -257,7 +254,6 @@ shelfware/
 │   │   ├── migrations/
 │   │   ├── schema.prisma # Database schema
 │   │   ├── seed.ts       # Project seeding script
-│   │   └── seed-users.ts # User seeding script
 │   ├── src/
 │   │   ├── config/       # Configuration (passport, JWT)
 │   │   ├── controllers/  # Request handlers

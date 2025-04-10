@@ -1,8 +1,21 @@
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
-// Sample project records
+const users = [
+  {
+    email: 'demo@example.com',
+    password: 'password123',
+    name: 'Demo User',
+  },
+  {
+    email: 'admin@example.com',
+    password: 'admin123',
+    name: 'Admin User',
+  },
+];
+
 const projects = [
   {
     title: "Shelfware Tracker",
@@ -60,28 +73,79 @@ const projects = [
       styling: "Box-drawing + ANSI colors"
     }
   }
-  
 ];
 
-async function main() {
-  console.log('Seeding database...');
-  
-  for (const project of projects) {
-    try {
-      const created = await prisma.project.create({ data: project });
-      console.log(`✅ Project created: ${created.title} (ID: ${created.id})`);
-    } catch (error) {
-      console.warn(`⚠️ Skipped "${project.title}" — possibly already exists or error occurred.`);
+// Create or skip users
+async function seedUsers() {
+  console.log('👥 Seeding users...');
+  for (const user of users) {
+    const existing = await prisma.user.findUnique({ where: { email: user.email } });
+    if (existing) {
+      console.log(`📌 User already exists: ${user.email}`);
+      continue;
     }
+
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    const created = await prisma.user.create({
+      data: {
+        email: user.email,
+        name: user.name,
+        password: hashedPassword,
+      },
+    });
+
+    console.log(`✅ Created user: ${created.email}`);
+  }
+}
+
+// Create projects and assign them to the demo user
+async function seedProjects() {
+  console.log('📦 Seeding projects...');
+
+  const demoUser = await prisma.user.findUnique({
+    where: { email: 'demo@example.com' },
+  });
+
+  if (!demoUser) {
+    throw new Error('❌ Demo user not found. Seed users first.');
   }
 
-  console.log('Seeding complete!');
+  for (const project of projects) {
+    try {
+      const existing = await prisma.project.findFirst({
+        where: { title: project.title },
+      });
+
+      if (existing) {
+        console.log(`📌 Project already exists: ${project.title}`);
+        continue;
+      }
+
+      const created = await prisma.project.create({
+        data: {
+          ...project,
+          userId: demoUser.id,
+        },
+      });
+
+      console.log(`✅ Created project: ${created.title}`);
+    } catch (err) {
+      console.warn(`⚠️ Failed to create project "${project.title}":`, err);
+    }
+  }
+}
+
+async function main() {
+  console.log('🌱 Starting full seed...');
+  await seedUsers();
+  await seedProjects();
+  console.log('🎉 Seeding complete!');
 }
 
 main()
   .catch((e) => {
-    console.error('Seeding failed:', e);
-    throw e;
+    console.error('🔥 Seeding failed:', e);
+    process.exit(1);
   })
   .finally(async () => {
     await prisma.$disconnect();

@@ -12,15 +12,15 @@ How many great ideas or side projects have you started, only to forget the detai
 
 ## Features
 
-- Project management dashboard
-- Status tracking (Planning, In Progress, Completed, Abandoned)
-- User authentication with JWT
-- Links to GitHub, deployed apps, and documentation
-- Hardware/component information storage (JSON)
-- Search and filter capabilities
-- RESTful API
-- Responsive design (desktop and mobile)
-- Light/dark theme
+- ✅ Project management dashboard
+- ✅ Status tracking (Planning, In Progress, Completed, Abandoned)
+- ✅ User authentication with JWT
+- ✅ Links to GitHub, deployed apps, and documentation
+- ✅ Hardware/component information storage (JSON)
+- ✅ Search and filter capabilities
+- ✅ RESTful API
+- ✅ Responsive design (desktop and mobile)
+- ✅ Light/dark theme
 
 ## Tech Stack
 
@@ -50,7 +50,7 @@ How many great ideas or side projects have you started, only to forget the detai
 - [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 - [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) (for database setup)
 
-### 1. Database Setup (using Docker)
+### 1. Database Setup
 
 The quickest way to get started is using Docker to set up PostgreSQL:
 
@@ -68,6 +68,7 @@ This will start a PostgreSQL instance with the following configuration:
 ### 2. Backend Setup
 
 ```bash
+# Navigate to backend directory
 cd backend
 
 # Install dependencies
@@ -75,14 +76,39 @@ npm install
 
 # Create .env file from example
 cp .env.example .env
+```
+
+Edit the `.env` file to ensure it contains the correct database connection string:
+```
+# If using Docker setup
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/shelfware?schema=public"
+
+# If using manual PostgreSQL setup, replace with your password
+DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/shelfware?schema=public"
+
+# JWT Secret (generate a random string for production)
+JWT_SECRET="generate-a-secure-random-string-for-production"
+
+# Server port
+BACKEND_PORT=3001
+
+# CORS setting (allows requests from the frontend)
+CORS_ORIGIN=http://localhost:5173
+```
+
+Then continue with setup:
+
+```bash
+# Generate Prisma client
+npx prisma generate
 
 # Run database migrations
 npx prisma migrate dev
 
-# Seed the database with initial data
+# Seed the database with sample projects
 npm run seed
 
-# Add test users (optional)
+# Add test users (optional but recommended)
 npm run seed-users
 
 # Start the development server
@@ -94,16 +120,31 @@ The backend should now be running at http://localhost:3001.
 ### 3. Frontend Setup
 
 ```bash
+# Navigate to frontend directory
 cd ../frontend
 
 # Install dependencies
 npm install
+
+# Optional: Create .env file for frontend
+echo "VITE_API_URL=http://localhost:3001" > .env
 
 # Start the development server
 npm run dev
 ```
 
 The frontend will be available at http://localhost:5173.
+
+### 4. Verifying Setup
+
+To verify everything is working correctly:
+
+1. Open http://localhost:3001/health in your browser - should show `{"status":"UP"}`
+2. Open http://localhost:3001/ready in your browser - should show `{"status":"READY","checks":{"database":"OK"}}`
+3. Open http://localhost:5173 in your browser - should display the PXL Shelfware Tracker application
+4. Try logging in with a test user (if you ran `npm run seed-users`):
+   - Email: demo@example.com
+   - Password: password123
 
 ## Authentication
 
@@ -210,6 +251,43 @@ shelfware/
 └── README.md             # This file
 ```
 
+## Dependency Information
+
+### Backend Dependencies
+
+The backend uses the following key dependencies:
+
+```bash
+# Core dependencies
+npm install express @types/express                 # Web framework
+npm install typescript ts-node @types/node         # TypeScript support
+npm install prisma @prisma/client                  # ORM for database access
+npm install passport passport-jwt passport-local    # Authentication
+npm install jsonwebtoken bcrypt                    # JWT and password hashing
+npm install cors @types/cors                       # CORS support
+npm install prom-client                            # Prometheus metrics
+
+# Development dependencies
+npm install --save-dev nodemon                     # Auto-reload during development
+npm install --save-dev jest ts-jest @types/jest    # Testing framework
+npm install --save-dev supertest @types/supertest  # API testing
+```
+
+### Frontend Dependencies
+
+The frontend uses the following key dependencies:
+
+```bash
+# Core dependencies
+npm install react react-dom                        # React library
+npm install react-router-dom                       # Routing
+npm install axios                                  # HTTP client
+
+# Development dependencies
+npm install --save-dev vite                        # Build tool
+npm install --save-dev typescript @types/react     # TypeScript support
+```
+
 ## Documentation
 
 For more detailed documentation, see:
@@ -220,8 +298,25 @@ For more detailed documentation, see:
 
 ## Running Tests
 
-Backend tests:
+### Backend Tests
+
 ```bash
+# Make sure you're in the backend directory
 cd backend
+
+# Install testing dependencies (if not already installed)
+npm install --save-dev jest ts-jest @types/jest supertest @types/supertest
+
+# Run all tests
 npm test
+
+# Run a specific test file
+npm test -- tests/auth.test.ts
+
+# Run tests with coverage report
+npm test -- --coverage
 ```
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

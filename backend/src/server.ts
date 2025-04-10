@@ -5,6 +5,7 @@ import promClient from 'prom-client';
 import passport from './config/passport';
 import authRoutes from './routes/authRoutes';
 import { requireAuth, optionalAuth } from './middleware/authMiddleware';
+//import corsMiddleware from 'cors-anywhere';
 
 // --- Prometheus Setup (Monitoring) ---
 promClient.collectDefaultMetrics();
@@ -37,9 +38,9 @@ const app = express();
 const PORT: number = parseInt(process.env.BACKEND_PORT || '3001', 10);
 
 // Define allowed origins for CORS
-const CORS_ORIGIN: string | string[] = process.env.CORS_ORIGIN || [
+const ALLOWED_ORIGINS = [
   'http://localhost:5173',
-  'http://localhost:5174',
+  'http://localhost:5174', 
   'http://localhost:3000',
   'http://localhost:3001',
   'http://localhost:8080',
@@ -48,7 +49,16 @@ const CORS_ORIGIN: string | string[] = process.env.CORS_ORIGIN || [
 
 // --- Middlewares ---
 app.use(cors({
-  origin: CORS_ORIGIN,
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (ALLOWED_ORIGINS.includes(origin)) {
+      callback(null, origin);
+    } else {
+      callback(null, ALLOWED_ORIGINS[0]); // Default to first origin if not matched
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));

@@ -38,7 +38,7 @@ const app = express();
 const PORT: number = parseInt(process.env.BACKEND_PORT || '3001', 10);
 
 // Define allowed origins for CORS
-const ALLOWED_ORIGINS = [
+const CORS_ORIGIN = [
   'http://localhost:5173',
   'http://localhost:5174', 
   'http://localhost:3000',
@@ -53,10 +53,10 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps, curl requests)
     if (!origin) return callback(null, true);
     
-    if (ALLOWED_ORIGINS.includes(origin)) {
+    if (CORS_ORIGIN.includes(origin)) {
       callback(null, origin);
     } else {
-      callback(null, ALLOWED_ORIGINS[0]); // Default to first origin if not matched
+      callback(null, CORS_ORIGIN[0]); // Default to first origin if not matched
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],

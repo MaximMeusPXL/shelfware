@@ -137,8 +137,8 @@ npx prisma generate
 # Run database migrations
 npx prisma migrate dev
 
-# Seed the database with sample projects
-npm run seed
+# Initialize the database
+npm run init-db
 
 # Add test users (optional but recommended)
 npm run seed-users

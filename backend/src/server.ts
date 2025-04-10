@@ -37,6 +37,29 @@ const app = express();
 // Define the server port. Use environment variable or default to 3001.
 const PORT: number = parseInt(process.env.BACKEND_PORT || '3001', 10);
 
+const defaultOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3001'
+];
+
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim())
+  : defaultOrigins;
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
+/*
 // Define allowed origins for CORS
 const CORS_ORIGIN = [
   'http://localhost:5173',
@@ -61,7 +84,7 @@ app.use(cors({
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
+})); */
 app.use(express.json());
 
 // Initialize Passport
@@ -294,7 +317,7 @@ if (require.main === module) {
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Backend server running at http://0.0.0.0:${PORT}`);
     console.log(`Using database: ${process.env.DATABASE_URL ? 'DATABASE_URL env var' : 'Default local PostgreSQL'}`);
-    console.log(`CORS enabled for: ${Array.isArray(CORS_ORIGIN) ? CORS_ORIGIN.join(', ') : CORS_ORIGIN}`);
+    console.log(`CORS enabled for: ${Array.isArray(allowedOrigins) ? allowedOrigins.join(', ') : String(allowedOrigins)}`);
     console.log(`Health endpoint: http://localhost:${PORT}/health`);
     console.log(`Readiness endpoint: http://localhost:${PORT}/ready`);
     console.log(`Metrics endpoint: http://localhost:${PORT}/metrics`);

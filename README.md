@@ -15,7 +15,7 @@ How many great ideas or side projects have you started, only to forget the detai
 - ✅ Project management dashboard
 - ✅ Status tracking (Planning, In Progress, Completed, Abandoned)
 - ✅ User authentication with JWT
-- ✅ Links to GitHub, deployed apps, and documentation
+- ✅ Project links to GitHub, deployed apps, and documentation
 - ✅ Hardware/component information storage (JSON)
 - ✅ Search and filter capabilities
 - ✅ RESTful API

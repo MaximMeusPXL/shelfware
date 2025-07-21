@@ -19,7 +19,7 @@ How many great ideas or side projects have you started, only to forget the detai
 - ✅ Hardware/component information storage (JSON)
 - ✅ Search and filter capabilities
 - ✅ RESTful API
-- ✅ Responsive design (desktop and mobile)
+- ✅ Responsive design
 - ✅ Light/dark theme
 
 ## Contents

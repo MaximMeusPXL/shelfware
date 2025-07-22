@@ -33,6 +33,9 @@ How many great ideas or side projects have you started, only to forget the detai
   - [Frontend](#frontend)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
+  - [Environment Variables Setup](#environment-variables-setup)
+    - [Backend Environment Variables](#backend-environment-variables)
+    - [Frontend Environment Variables](#frontend-environment-variables)
   - [1. Database Setup](#1-database-setup)
   - [2. Backend Setup](#2-backend-setup)
   - [3. Frontend Setup](#3-frontend-setup)
@@ -42,13 +45,10 @@ How many great ideas or side projects have you started, only to forget the detai
   - [Authentication Endpoints](#authentication-endpoints)
   - [Project Endpoints](#project-endpoints)
   - [Health \& Monitoring](#health--monitoring)
+- [Monitoring with Prometheus Metrics](#monitoring-with-prometheus-metrics)
 - [Testing the API](#testing-the-api)
   - [Using cURL](#using-curl)
 - [Project Structure](#project-structure)
-- [Dependency Information](#dependency-information)
-  - [Backend Dependencies](#backend-dependencies)
-  - [Frontend Dependencies](#frontend-dependencies)
-- [Documentation](#documentation)
 - [Running Tests](#running-tests)
   - [Backend Tests](#backend-tests)
 - [License](#license)
@@ -82,6 +82,39 @@ How many great ideas or side projects have you started, only to forget the detai
 - [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 - [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) (for database setup)
 
+### Environment Variables Setup
+
+This project uses environment variables for configuration. Here's what you need to know:
+
+#### Backend Environment Variables
+
+The backend **requires** a `.env` file. An example is provided:
+
+```bash
+cd backend
+cp .env.example .env
+```
+
+Required variables in `.env`:
+- `DATABASE_URL` - PostgreSQL connection string
+- `JWT_SECRET` - Secret key for JWT tokens
+- `BACKEND_PORT` - Port for the backend server (default: 3001)
+- `CORS_ORIGIN` - Allowed origins for CORS (default: http://localhost:5173)
+
+#### Frontend Environment Variables
+
+The frontend has **optional** environment variables. If not provided, it defaults to `http://localhost:3001` for the API:
+
+```bash
+cd frontend
+# Optional: Create .env file
+echo "VITE_API_URL=http://localhost:3001/api" > .env
+```
+
+You only need to create this file if:
+- Your backend runs on a different port
+- You're deploying to production with a different API URL
+
 ### 1. Database Setup
 
 The quickest way to get started is using Docker to set up PostgreSQL:
@@ -106,25 +139,22 @@ cd backend
 # Install dependencies
 npm install
 
-# Create .env file from example
+# Create .env file from example (REQUIRED)
 cp .env.example .env
 ```
 
-Edit the `.env` file to ensure it contains the correct database connection string:
-```
-# If using Docker setup
+Edit the `.env` file if needed. The default values work with the Docker setup:
+```env
+# Database connection (works with Docker setup)
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/shelfware?schema=public"
 
-# If using manual PostgreSQL setup, replace with your password
-DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/shelfware?schema=public"
+# JWT Secret - Generate a secure random string for production
+JWT_SECRET="c3a68d7c-dc34-4e5f-bf1a-705062c81c53"
 
-# JWT Secret (generate a random string for production)
-JWT_SECRET="generate-a-secure-random-string-for-production"
-
-# Server port
+# Server configuration
 BACKEND_PORT=3001
 
-# CORS setting (allows requests from the frontend)
+# CORS - Frontend URL
 CORS_ORIGIN=http://localhost:5173
 ```
 
@@ -137,7 +167,7 @@ npx prisma generate
 # Run database migrations
 npx prisma migrate dev
 
-# Seed the database with demo data
+# Seed the database with demo data (creates users AND projects)
 npm run seed
 
 # Start the development server
@@ -155,8 +185,8 @@ cd ../frontend
 # Install dependencies
 npm install
 
-# Optional: Create .env file for frontend
-echo "VITE_API_URL=http://localhost:3001" > .env
+# Create .env file if using non-default API URL
+echo "VITE_API_URL=http://localhost:3001/api" > .env
 
 # Start the development server
 npm run dev
@@ -168,28 +198,32 @@ The frontend will be available at http://localhost:5173.
 
 To verify everything is working correctly:
 
-1. Open http://localhost:3001/health in your browser - should show `{"status":"UP"}`
-2. Open http://localhost:3001/ready in your browser - should show `{"status":"READY","checks":{"database":"OK"}}`
-3. Open http://localhost:5173 in your browser - should display the PXL Shelfware Tracker application
-4. Try logging in with a test user (if you ran `npm run seed-users`):
+1. **Check backend health**: Open http://localhost:3001/health - should show `{"status":"UP"}`
+2. **Check database connection**: Open http://localhost:3001/ready - should show `{"status":"READY","checks":{"database":"OK"}}`
+3. **Check frontend**: Open http://localhost:5173 - should display the PXL Shelfware Tracker application
+4. **Try logging in** with the demo account (created by `npm run seed`):
    - Email: demo@example.com
    - Password: password123
 
 ## Authentication
 
-The application implements token-based authentication using JWT. Demo accounts are created if you run the user seeding script:
+The application implements token-based authentication using JWT. Demo accounts are created when you run the seed script:
 
 ```bash
 # From the backend directory
-npm run seed-users
+npm run seed
 ```
 
 This creates the following test accounts:
-- Email: demo@example.com
-- Password: password123
+- **Demo User**
+  - Email: demo@example.com
+  - Password: password123
 
-- Email: admin@example.com
-- Password: admin123
+- **Admin User**
+  - Email: admin@example.com
+  - Password: admin123
+
+The seed script also creates sample projects assigned to the demo user.
 
 ## API Endpoints
 
@@ -218,6 +252,24 @@ This creates the following test accounts:
 | GET | /health | Liveness check (application is running) |
 | GET | /ready | Readiness check (database is connected) |
 | GET | /metrics | Prometheus metrics |
+
+## Monitoring with Prometheus Metrics
+
+The `/metrics` endpoint exposes application metrics in Prometheus format for monitoring and alerting. These include:
+
+**Default Metrics:**
+- Process metrics (CPU usage, memory usage, heap statistics)
+- Node.js runtime metrics (active handles, garbage collection stats)
+- System metrics (load average, uptime)
+
+**Custom Application Metrics:**
+- `http_request_duration_ms` - Histogram tracking request latency in milliseconds
+  - Buckets: 50ms, 100ms, 200ms, 500ms, 1s, 2.5s, 5s
+  - Labels: method, route, status code
+- `http_requests_total` - Counter for total HTTP requests
+  - Labels: method, route, status code
+
+These metrics can be scraped by a Prometheus server to monitor application performance, track error rates, and set up alerts for anomalies.
 
 ## Testing the API
 
@@ -253,7 +305,7 @@ shelfware/
 │   ├── prisma/           # Prisma schema, migrations, seed script
 │   │   ├── migrations/
 │   │   ├── schema.prisma # Database schema
-│   │   ├── seed.ts       # Project seeding script
+│   │   └── seed.ts       # Seeds both users and projects
 │   ├── src/
 │   │   ├── config/       # Configuration (passport, JWT)
 │   │   ├── controllers/  # Request handlers
@@ -261,7 +313,8 @@ shelfware/
 │   │   ├── routes/       # Route definitions
 │   │   └── server.ts     # Main server file
 │   ├── tests/            # Unit and integration tests
-│   └── .env.example      # Environment variables template
+│   ├── .env.example      # Environment variables template
+│   └── .env              # Your local environment variables (create from .env.example)
 │
 ├── frontend/             # React Frontend Application
 │   ├── public/           # Static assets
@@ -273,56 +326,12 @@ shelfware/
 │   │   ├── pages/        # Application pages
 │   │   ├── services/     # API communication
 │   │   └── utils/        # Helper functions
-│   └── index.html        # HTML entry point
+│   ├── index.html        # HTML entry point
+│   └── .env              # (Optional) Frontend environment variables
 │
 ├── compose.yml           # Docker Compose configuration
 └── README.md             # This file
 ```
-
-## Dependency Information
-
-### Backend Dependencies
-
-The backend uses the following key dependencies:
-
-```bash
-# Core dependencies
-npm install express @types/express                 # Web framework
-npm install typescript ts-node @types/node         # TypeScript support
-npm install prisma @prisma/client                  # ORM for database access
-npm install passport passport-jwt passport-local    # Authentication
-npm install jsonwebtoken bcrypt                    # JWT and password hashing
-npm install cors @types/cors                       # CORS support
-npm install prom-client                            # Prometheus metrics
-
-# Development dependencies
-npm install --save-dev nodemon                     # Auto-reload during development
-npm install --save-dev jest ts-jest @types/jest    # Testing framework
-npm install --save-dev supertest @types/supertest  # API testing
-```
-
-### Frontend Dependencies
-
-The frontend uses the following key dependencies:
-
-```bash
-# Core dependencies
-npm install react react-dom                        # React library
-npm install react-router-dom                       # Routing
-npm install axios                                  # HTTP client
-
-# Development dependencies
-npm install --save-dev vite                        # Build tool
-npm install --save-dev typescript @types/react     # TypeScript support
-```
-
-## Documentation
-
-For more detailed documentation, see:
-
-- [Authentication System](./docs/AUTHENTICATION.md) - Details on the JWT authentication implementation
-- [API Documentation](./docs/API.md) - Complete API reference
-- [Testing Guide](./docs/TESTING.md) - Guide to running and writing tests
 
 ## Running Tests
 
@@ -332,18 +341,14 @@ For more detailed documentation, see:
 # Make sure you're in the backend directory
 cd backend
 
-# Install testing dependencies (if not already installed)
-npm install --save-dev jest ts-jest @types/jest supertest @types/supertest
-
 # Run all tests
 npm test
-
-# Run a specific test file
-npm test -- tests/auth.test.ts
 
 # Run tests with coverage report
 npm test -- --coverage
 ```
+
+For more details on testing, including how to write tests for authenticated endpoints, see the inline documentation in the test files.
 
 ## License
 

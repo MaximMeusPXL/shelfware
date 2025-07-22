@@ -46,11 +46,19 @@ How many great ideas or side projects have you started, only to forget the detai
   - [Project Endpoints](#project-endpoints)
   - [Health \& Monitoring](#health--monitoring)
 - [Monitoring with Prometheus Metrics](#monitoring-with-prometheus-metrics)
+- [Production Deployment](#production-deployment)
+  - [Using Docker Compose](#using-docker-compose)
+  - [Manual Deployment](#manual-deployment)
+    - [Backend](#backend-1)
+    - [Frontend](#frontend-1)
+    - [Database](#database-1)
 - [Testing the API](#testing-the-api)
   - [Using cURL](#using-curl)
 - [Project Structure](#project-structure)
+- [Environment Variables in Production](#environment-variables-in-production)
 - [Running Tests](#running-tests)
   - [Backend Tests](#backend-tests)
+- [Deployment Notes](#deployment-notes)
 - [License](#license)
 
 
@@ -97,13 +105,13 @@ cp .env.example .env
 
 Required variables in `.env`:
 - `DATABASE_URL` - PostgreSQL connection string
-- `JWT_SECRET` - Secret key for JWT tokens
+- `JWT_SECRET` - Secret key for JWT tokens (⚠️ **Change this in production!**)
 - `BACKEND_PORT` - Port for the backend server (default: 3001)
 - `CORS_ORIGIN` - Allowed origins for CORS (default: http://localhost:5173)
 
 #### Frontend Environment Variables
 
-The frontend has **optional** environment variables. If not provided, it defaults to `http://localhost:3001` for the API:
+The frontend has optional environment variables. If not provided, it defaults to `http://localhost:3001` for the API:
 
 ```bash
 cd frontend
@@ -148,7 +156,8 @@ Edit the `.env` file if needed. The default values work with the Docker setup:
 # Database connection (works with Docker setup)
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/shelfware?schema=public"
 
-# JWT Secret - Generate a secure random string for production
+# JWT Secret - IMPORTANT: Generate a secure random string for production!
+# However, for PXL exam assignments, this hardcoded value can stay
 JWT_SECRET="c3a68d7c-dc34-4e5f-bf1a-705062c81c53"
 
 # Server configuration
@@ -172,9 +181,14 @@ npm run seed
 
 # Start the development server
 npm run dev
+
+# For production deployment (no TypeScript compilation needed):
+npx ts-node src/server.ts
 ```
 
 The backend should now be running at http://localhost:3001.
+
+**Note:** The backend runs TypeScript directly using `ts-node`. There's no build/compilation step needed for the backend.
 
 ### 3. Frontend Setup
 
@@ -186,13 +200,23 @@ cd ../frontend
 npm install
 
 # Create .env file if using non-default API URL
+# For local development (backend on same machine):
 echo "VITE_API_URL=http://localhost:3001/api" > .env
+
+# For Docker development (e.g. if backend runs in container):
+echo "VITE_API_URL=http://backend:3001/api" > .env
 
 # Start the development server
 npm run dev
+
+# For production build:
+npm run build
+# This creates a 'dist' folder with static files to serve via nginx
 ```
 
-The frontend will be available at http://localhost:5173.
+The frontend will be available at http://localhost:5173 (development) or needs to be served via nginx (production).
+
+**Note:** The frontend includes an `nginx.conf` file for production deployments.
 
 ### 4. Verifying Setup
 
@@ -202,8 +226,8 @@ To verify everything is working correctly:
 2. **Check database connection**: Open http://localhost:3001/ready - should show `{"status":"READY","checks":{"database":"OK"}}`
 3. **Check frontend**: Open http://localhost:5173 - should display the PXL Shelfware Tracker application
 4. **Try logging in** with the demo account (created by `npm run seed`):
-   - Email: demo@example.com
-   - Password: password123
+   - Email: `demo@example.com`
+   - Password: `password123`
 
 ## Authentication
 
@@ -216,14 +240,14 @@ npm run seed
 
 This creates the following test accounts:
 - **Demo User**
-  - Email: demo@example.com
-  - Password: password123
+  - Email: `demo@example.com`
+  - Password: `password123`
 
 - **Admin User**
-  - Email: admin@example.com
-  - Password: admin123
+  - Email: `admin@example.com`
+  - Password: `admin123`
 
-The seed script also creates sample projects assigned to the demo user.
+The seed script also creates sample projects assigned to the `demo` user.
 
 ## API Endpoints
 
@@ -271,6 +295,46 @@ The `/metrics` endpoint exposes application metrics in Prometheus format for mon
 
 These metrics can be scraped by a Prometheus server to monitor application performance, track error rates, and set up alerts for anomalies.
 
+## Production Deployment
+
+### Using Docker Compose
+
+The easiest way to deploy all components:
+
+```bash
+# Start all services
+docker compose up -d
+
+# The application will be available at:
+# - Frontend: http://localhost:8080
+# - Backend API: http://localhost:3001
+# - Database: localhost:5432
+```
+
+### Manual Deployment
+
+#### Backend
+```bash
+cd backend
+npm install
+npx prisma generate
+npx prisma migrate deploy  # For production
+npx ts-node src/server.ts   # No build step needed
+```
+
+#### Frontend
+```bash
+cd frontend
+npm install
+npm run build              # Creates 'dist' folder
+# Serve the 'dist' folder with nginx using the provided nginx.conf
+```
+
+#### Database
+- Ensure PostgreSQL is running
+- Run migrations: `npx prisma migrate deploy`
+- (Optional) Seed data: `npm run seed`
+
 ## Testing the API
 
 ### Using cURL
@@ -313,11 +377,12 @@ shelfware/
 │   │   ├── routes/       # Route definitions
 │   │   └── server.ts     # Main server file
 │   ├── tests/            # Unit and integration tests
+│   ├── Dockerfile        # Docker configuration for backend
 │   ├── .env.example      # Environment variables template
 │   └── .env              # Your local environment variables (create from .env.example)
 │
 ├── frontend/             # React Frontend Application
-│   ├── public/           # Static assets
+│   ├── public/           # Static assets including favicon
 │   ├── src/
 │   │   ├── assets/       # Images and other assets
 │   │   ├── components/   # Reusable UI components
@@ -326,12 +391,34 @@ shelfware/
 │   │   ├── pages/        # Application pages
 │   │   ├── services/     # API communication
 │   │   └── utils/        # Helper functions
+│   ├── nginx.conf        # Nginx configuration for production
+│   ├── Dockerfile        # Docker configuration for frontend
 │   ├── index.html        # HTML entry point
 │   └── .env              # (Optional) Frontend environment variables
 │
 ├── compose.yml           # Docker Compose configuration
+├── docs/                 # Additional documentation
 └── README.md             # This file
 ```
+
+## Environment Variables in Production
+
+For production deployments (non-Docker), adjust the environment variables:
+
+**Backend `.env`:**
+```env
+DATABASE_URL="postgresql://user:password@your-db-host:5432/shelfware?schema=public"
+BACKEND_PORT=3001
+CORS_ORIGIN=https://your-frontend-domain.com
+JWT_SECRET="generate-a-secure-random-string"
+```
+
+**Frontend `.env`:**
+```env
+VITE_API_URL=https://your-api-domain.com/api
+```
+
+**Security Note:** The JWT_SECRET in `.env.example` is for development only. Always generate a new secure secret for production deployments.
 
 ## Running Tests
 
@@ -348,7 +435,15 @@ npm test
 npm test -- --coverage
 ```
 
-For more details on testing, including how to write tests for authenticated endpoints, see the inline documentation in the test files.
+For more details on testing, including how to write tests for authenticated endpoints, see the test files in the `backend/tests` directory.
+
+## Deployment Notes
+
+- **Backend**: Runs TypeScript directly with ts-node, no compilation needed
+- **Frontend**: Must be built with `npm run build` before deployment
+- **Database**: Use `npx prisma migrate deploy` for production migrations
+- **Docker**: Full stack can be deployed with `docker compose up -d`
+- **Ports**: Backend runs on `3001`, Frontend dev server on `5173`, Frontend production (nginx) on `80`/`8080`
 
 ## License
 

@@ -28,6 +28,7 @@
     # Copy built app and dependencies
     COPY --from=build /app/dist ./dist
     COPY --from=build /app/node_modules ./node_modules
+    COPY --from=build /app/dist/prisma ./dist/prisma
     COPY --from=build /app/package*.json ./
     
     # Copy Prisma client assets

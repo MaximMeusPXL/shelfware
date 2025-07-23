@@ -157,24 +157,24 @@ Create a `.env` file in the frontend directory:
 
 1. **Server setup (Ubuntu/Debian):**
    ```bash
-  [deleted]
+   [deleted]
    ```
 
 2. **Deploy backend:**
    ```bash
-  [deleted]
+   [deleted]
    ```
 
 #### Frontend Deployment
 
 1. **Build frontend:**
    ```bash
-  [deleted]
+   [deleted]
    ```
 
 2. **Setup Nginx:**
    ```bash
-  [deleted]
+   [deleted]
    ```
 
 ## Database Setup
@@ -245,7 +245,7 @@ main()
 
 **Basic configuration (`/etc/nginx/sites-available/shelfware`):**
 ```nginx
-  [deleted]
+[deleted]
 ```
 
 ## SSL/TLS Setup

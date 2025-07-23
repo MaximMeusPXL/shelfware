@@ -39,11 +39,11 @@ The PXL Shelfware Tracker can be deployed using several methods:
 ### Architecture
 ```
 ┌─────────────┐     ┌──────────────┐     ┌──────────────┐
-│   Nginx     │───▶│   Frontend   │───▶│   Backend    │
+│   Nginx     │----▶│   Frontend   │----▶│   Backend    │
 │  (Reverse   │     │   (React)    │     │  (Express)   │
 │   Proxy)    │     │   Port 80    │     │  Port 3001   │
 └─────────────┘     └──────────────┘     └──────────────┘
-                                                 │
+                                                 |
                                           ┌──────▼──────┐
                                           │ PostgreSQL  │
                                           │ Port 5432   │

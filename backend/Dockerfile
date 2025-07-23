@@ -1,26 +1,44 @@
-# This Dockerfile prepares a backend Node.js application for production use.
-# It sets up the environment, installs necessary packages, prepares the database client,
-# builds the application code, and creates a small final image for running the backend.
+# -------- STAGE 1: Build --------
+    FROM node:18 AS build
 
-# The application is expected to run on port 3001 and should start in production mode.
-
-# After setup, the database should be initialized before the backend is started.
-# This process creates the required tables and seeds the database with initial data.
-
-# A multi-stage build is used:
-# - The first stage handles setup, dependency installation, and application build.
-# - The second stage copies only the essential output into a clean base image.
-
-# The result is a lightweight production image containing only what’s needed to run the app.
-
-
-# ----------------------------------------------------
-# Required commands (to be used in the Dockerfile):
-#
-# npm install
-# npx prisma generate
-# npm run build
-# npm start
-# npm run init-db
-#
-# ----------------------------------------------------
+    WORKDIR /app
+    
+    # Install dependencies
+    COPY package*.json ./
+    RUN npm install
+    
+    # Prisma setup (incl. engine build voor juiste target)
+    COPY prisma ./prisma
+    RUN npx prisma generate
+    
+    # Copy rest of the source code
+    COPY . .
+    
+    # Build de TypeScript code naar dist/
+    RUN npm run build
+    
+    # -------- STAGE 2: Production --------
+    FROM node:18-slim
+    
+    WORKDIR /app
+    
+    # Installeer OpenSSL
+    RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+    
+    # Copy built app and dependencies
+    COPY --from=build /app/dist ./dist
+    COPY --from=build /app/node_modules ./node_modules
+    COPY --from=build /app/package*.json ./
+    
+    # Copy Prisma client assets
+    COPY --from=build /app/prisma ./prisma
+    
+    # Set runtime environment
+    ENV NODE_ENV=production
+    
+    # Expose backend port
+    EXPOSE 3001
+    
+    # Start de backend
+    CMD ["npm", "start"]
+    

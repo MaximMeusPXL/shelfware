@@ -131,8 +131,8 @@ Create a `.env` file in the frontend directory:
 
 2. **Create `.env.prod` file:**
    ```env
-  [deleted]
-  ```
+   [deleted]
+   ```
 
 3. **Deploy:**
    ```bash

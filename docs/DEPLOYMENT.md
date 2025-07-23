@@ -8,6 +8,8 @@
 - [Environment Configuration](#environment-configuration)
   - [Backend Environment Variables](#backend-environment-variables)
   - [Frontend Environment Variables](#frontend-environment-variables)
+- [Development Deployment](#development-deployment)
+  - [Local Development](#local-development)
 - [Production Deployment](#production-deployment)
   - [Using Docker Compose](#using-docker-compose)
   - [Building Docker Images](#building-docker-images)
@@ -85,7 +87,7 @@ Create a `.env` file in the frontend directory:
 
 ```env
 [deleted]
-]```
+```
 
 ## Development Deployment
 

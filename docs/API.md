@@ -2,7 +2,11 @@
 
 - [Base URL](#base-url)
 - [Authentication](#authentication)
+  - [Authentication Flow:](#authentication-flow)
+  - [Authentication Strategies:](#authentication-strategies)
 - [Response Format](#response-format)
+  - [Success Response](#success-response)
+  - [Error Response](#error-response)
 - [Authentication Endpoints](#authentication-endpoints)
   - [Register User](#register-user)
   - [Login](#login)
@@ -17,48 +21,71 @@
   - [Health Check](#health-check)
   - [Readiness Check](#readiness-check)
   - [Metrics](#metrics)
-- [Status Codes](#status-codes)
+- [Error Handling](#error-handling)
+  - [Status Codes](#status-codes)
+  - [Error Response Format](#error-response-format)
+  - [Prisma-Specific Error Codes](#prisma-specific-error-codes)
+- [CORS Configuration](#cors-configuration)
+- [Rate Limiting](#rate-limiting)
 - [Examples](#examples)
-  - [curl Examples](#curl-examples)
-
+  - [Complete Workflow Example](#complete-workflow-example)
+  - [cURL Examples](#curl-examples)
+  - [JavaScript/Axios Examples](#javascriptaxios-examples)
 
 This document provides a comprehensive reference for the PXL Shelfware Tracker API endpoints.
 
-## <a name='BaseURL'></a>Base URL
+## Base URL
 
 All API endpoints are relative to:
 
 ```
-http://localhost:3001/api
+Development: http://localhost:3001/api
+Production: https://your-api-domain.com/api
 ```
 
-For production, this would be your deployed API URL.
+The API base URL can be configured via the `VITE_API_URL` environment variable in the frontend.
 
-## <a name='Authentication'></a>Authentication
+## Authentication
 
-Most endpoints require authentication using JWT tokens. To authenticate:
+The API uses JWT (JSON Web Tokens) for authentication. Most endpoints require authentication.
 
-1. Obtain a token by registering or logging in
-2. Include the token in the Authorization header:
+### Authentication Flow:
+1. Register or login to obtain a JWT token
+2. Include the token in the Authorization header for subsequent requests:
    ```
    Authorization: Bearer YOUR_JWT_TOKEN
    ```
+3. Tokens expire after 7 days
 
-## <a name='ResponseFormat'></a>Response Format
+### Authentication Strategies:
+- **Local Strategy**: Email/password authentication for login
+- **JWT Strategy**: Token-based authentication for API access
 
-All responses are in JSON format.
+## Response Format
 
-**Success Response**
+All responses are in JSON format with consistent structure.
+
+### Success Response
 ```json
 {
   "id": "clXXXXXXXXXXXXX",
   "title": "Project Example",
   "status": "In Progress",
-  // Other fields...
+  "description": "Project description",
+  "githubUrl": "https://github.com/example/repo",
+  "deployedUrl": "https://example.com",
+  "docsUrl": "https://docs.example.com",
+  "hardwareInfo": {
+    "cpu": "Intel i7",
+    "ram": "16GB"
+  },
+  "createdAt": "2023-01-01T00:00:00.000Z",
+  "updatedAt": "2023-01-01T00:00:00.000Z",
+  "userId": "clXXXXXXXXXXXXX"
 }
 ```
 
-**Error Response**
+### Error Response
 ```json
 {
   "error": "Error message",
@@ -66,9 +93,9 @@ All responses are in JSON format.
 }
 ```
 
-## <a name='AuthenticationEndpoints'></a>Authentication Endpoints
+## Authentication Endpoints
 
-### <a name='RegisterUser'></a>Register User
+### Register User
 
 Creates a new user account and returns a JWT token.
 
@@ -81,7 +108,7 @@ POST /auth/register
 {
   "email": "user@example.com",
   "password": "password123",
-  "name": "User Name" // Optional
+  "name": "User Name"  // Optional
 }
 ```
 
@@ -91,7 +118,9 @@ POST /auth/register
   "user": {
     "id": "clXXXXXXXXXXXXX",
     "email": "user@example.com",
-    "name": "User Name"
+    "name": "User Name",
+    "createdAt": "2023-01-01T00:00:00.000Z",
+    "updatedAt": "2023-01-01T00:00:00.000Z"
   },
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
@@ -100,8 +129,14 @@ POST /auth/register
 **Error Responses**
 - `400 Bad Request`: Email or password missing
 - `400 Bad Request`: Email already in use
+- `500 Internal Server Error`: Server error
 
-### <a name='Login'></a>Login
+**Validation Rules**
+- Email must be valid format
+- Password must be at least 6 characters (enforced by frontend)
+- Email must be unique
+
+### Login
 
 Authenticates a user and returns a JWT token.
 
@@ -123,16 +158,18 @@ POST /auth/login
   "user": {
     "id": "clXXXXXXXXXXXXX",
     "email": "user@example.com",
-    "name": "User Name"
+    "name": "User Name",
+    "createdAt": "2023-01-01T00:00:00.000Z",
+    "updatedAt": "2023-01-01T00:00:00.000Z"
   },
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
 
 **Error Responses**
-- `401 Unauthorized`: Invalid credentials
+- `401 Unauthorized`: Invalid email or password
 
-### <a name='GetUserProfile'></a>Get User Profile
+### Get User Profile
 
 Returns the authenticated user's profile.
 
@@ -150,18 +187,22 @@ Authorization: Bearer YOUR_JWT_TOKEN
 {
   "id": "clXXXXXXXXXXXXX",
   "email": "user@example.com",
-  "name": "User Name"
+  "name": "User Name",
+  "createdAt": "2023-01-01T00:00:00.000Z",
+  "updatedAt": "2023-01-01T00:00:00.000Z"
 }
 ```
 
 **Error Responses**
 - `401 Unauthorized`: Missing or invalid token
 
-## <a name='ProjectEndpoints'></a>Project Endpoints
+## Project Endpoints
 
-### <a name='GetAllProjects'></a>Get All Projects
+### Get All Projects
 
-For authenticated users, returns only their projects. 
+Returns projects based on authentication status:
+- **Authenticated**: Returns only the user's projects
+- **Not authenticated**: Returns empty array (frontend handles this)
 
 ```
 GET /projects
@@ -171,6 +212,9 @@ GET /projects
 ```
 Authorization: Bearer YOUR_JWT_TOKEN
 ```
+
+**Query Parameters**
+None currently implemented. Frontend handles filtering and search.
 
 **Response (200 OK)**
 ```json
@@ -195,7 +239,12 @@ Authorization: Bearer YOUR_JWT_TOKEN
 ]
 ```
 
-### <a name='GetProjectbyID'></a>Get Project by ID
+**Notes**
+- Uses `optionalAuth` middleware
+- If authenticated, returns only projects where `userId` matches the authenticated user
+- Results are ordered by `createdAt` in descending order (newest first)
+
+### Get Project by ID
 
 Returns a specific project. Authentication is required, and users can only access their own projects.
 
@@ -207,6 +256,9 @@ GET /projects/:id
 ```
 Authorization: Bearer YOUR_JWT_TOKEN
 ```
+
+**URL Parameters**
+- `id`: Project ID (cuid format)
 
 **Response (200 OK)**
 ```json
@@ -229,11 +281,12 @@ Authorization: Bearer YOUR_JWT_TOKEN
 ```
 
 **Error Responses**
+- `400 Bad Request`: Invalid project ID format
 - `401 Unauthorized`: Not authenticated
-- `403 Forbidden`: Not authorized to access this project
+- `403 Forbidden`: Project belongs to another user
 - `404 Not Found`: Project not found
 
-### <a name='CreateProject'></a>Create Project
+### Create Project
 
 Creates a new project for the authenticated user.
 
@@ -244,18 +297,19 @@ POST /projects
 **Headers**
 ```
 Authorization: Bearer YOUR_JWT_TOKEN
+Content-Type: application/json
 ```
 
 **Request Body**
 ```json
 {
-  "title": "New Project",
-  "status": "Planning",
-  "description": "Project description",
-  "githubUrl": "https://github.com/user/project",
-  "deployedUrl": "https://project.example.com",
-  "docsUrl": "https://docs.project.example.com",
-  "hardwareInfo": {
+  "title": "New Project",              // Required
+  "status": "Planning",                // Required: Planning|In Progress|Completed|Abandoned
+  "description": "Project description", // Optional
+  "githubUrl": "https://github.com/user/project", // Optional
+  "deployedUrl": "https://project.example.com",   // Optional
+  "docsUrl": "https://docs.project.example.com",  // Optional
+  "hardwareInfo": {                    // Optional: JSON object
     "cpu": "Intel i7",
     "ram": "16GB"
   }
@@ -283,12 +337,18 @@ Authorization: Bearer YOUR_JWT_TOKEN
 ```
 
 **Error Responses**
-- `400 Bad Request`: Missing required fields (title and status)
+- `400 Bad Request`: Missing required fields (title or status)
 - `401 Unauthorized`: Not authenticated
+- `500 Internal Server Error`: Server error
 
-### <a name='UpdateProject'></a>Update Project
+**Validation Notes**
+- URLs are validated by frontend
+- Hardware info must be valid JSON object
+- Project is automatically associated with authenticated user
 
-Updates an existing project. Authentication is required, and users can only update their own projects.
+### Update Project
+
+Updates an existing project. Authentication required, users can only update their own projects.
 
 ```
 PUT /projects/:id
@@ -297,18 +357,22 @@ PUT /projects/:id
 **Headers**
 ```
 Authorization: Bearer YOUR_JWT_TOKEN
+Content-Type: application/json
 ```
+
+**URL Parameters**
+- `id`: Project ID to update
 
 **Request Body**
 ```json
 {
-  "title": "Updated Project",
-  "status": "In Progress",
-  "description": "Updated description",
-  "githubUrl": "https://github.com/user/updated-project",
-  "deployedUrl": "https://updated-project.example.com",
-  "docsUrl": "https://docs.updated-project.example.com",
-  "hardwareInfo": {
+  "title": "Updated Project",          // Required
+  "status": "In Progress",             // Required
+  "description": "Updated description", // Optional
+  "githubUrl": "https://github.com/user/updated-project", // Optional
+  "deployedUrl": "https://updated-project.example.com",   // Optional
+  "docsUrl": "https://docs.updated-project.example.com",  // Optional
+  "hardwareInfo": {                    // Optional
     "cpu": "Intel i9",
     "ram": "32GB"
   }
@@ -316,34 +380,17 @@ Authorization: Bearer YOUR_JWT_TOKEN
 ```
 
 **Response (200 OK)**
-```json
-{
-  "id": "clXXXXXXXXXXXXX",
-  "title": "Updated Project",
-  "status": "In Progress",
-  "description": "Updated description",
-  "githubUrl": "https://github.com/user/updated-project",
-  "deployedUrl": "https://updated-project.example.com",
-  "docsUrl": "https://docs.updated-project.example.com",
-  "hardwareInfo": {
-    "cpu": "Intel i9",
-    "ram": "32GB"
-  },
-  "createdAt": "2023-01-01T00:00:00.000Z",
-  "updatedAt": "2023-01-03T00:00:00.000Z",
-  "userId": "clXXXXXXXXXXXXX"
-}
-```
+Returns the updated project object (same format as GET /projects/:id)
 
 **Error Responses**
-- `400 Bad Request`: Missing required fields
+- `400 Bad Request`: Missing required fields or invalid ID format
 - `401 Unauthorized`: Not authenticated
-- `403 Forbidden`: Not authorized to modify this project
+- `403 Forbidden`: Project belongs to another user
 - `404 Not Found`: Project not found
 
-### <a name='DeleteProject'></a>Delete Project
+### Delete Project
 
-Deletes a project. Authentication is required, and users can only delete their own projects.
+Deletes a project. Authentication required, users can only delete their own projects.
 
 ```
 DELETE /projects/:id
@@ -354,19 +401,25 @@ DELETE /projects/:id
 Authorization: Bearer YOUR_JWT_TOKEN
 ```
 
+**URL Parameters**
+- `id`: Project ID to delete
+
 **Response (204 No Content)**
-No response body is returned on successful deletion.
+No response body on successful deletion.
 
 **Error Responses**
+- `400 Bad Request`: Invalid project ID format
 - `401 Unauthorized`: Not authenticated
-- `403 Forbidden`: Not authorized to delete this project
+- `403 Forbidden`: Project belongs to another user
 - `404 Not Found`: Project not found
 
-## <a name='HealthMonitoringEndpoints'></a>Health & Monitoring Endpoints
+## Health & Monitoring Endpoints
 
-### <a name='HealthCheck'></a>Health Check
+These endpoints are used for monitoring application health and do not require authentication.
 
-Checks if the application is running.
+### Health Check
+
+Basic liveness check to verify the application is running.
 
 ```
 GET /health
@@ -379,9 +432,9 @@ GET /health
 }
 ```
 
-### <a name='ReadinessCheck'></a>Readiness Check
+### Readiness Check
 
-Checks if the application is ready to handle requests (including database connection).
+Checks if the application is ready to handle requests, including database connectivity.
 
 ```
 GET /ready
@@ -408,7 +461,7 @@ GET /ready
 }
 ```
 
-### <a name='Metrics'></a>Metrics
+### Metrics
 
 Exposes Prometheus metrics for monitoring.
 
@@ -417,56 +470,177 @@ GET /metrics
 ```
 
 **Response (200 OK)**
-Returns Prometheus-formatted metrics.
+Returns Prometheus-formatted metrics including:
+- Default Node.js metrics (memory, CPU, garbage collection)
+- Custom metrics:
+  - `http_request_duration_ms`: Request duration histogram
+  - `http_requests_total`: Total request counter
 
-## <a name='StatusCodes'></a>Status Codes
+**Response Format**
+```
+# HELP http_request_duration_ms Duration of HTTP requests in ms
+# TYPE http_request_duration_ms histogram
+http_request_duration_ms_bucket{le="50",method="GET",route="/api/projects",code="200"} 45
+...
+```
+
+## Error Handling
+
+The API uses standard HTTP status codes and consistent error response format.
+
+### Status Codes
 
 | Status Code | Description |
 |-------------|-------------|
-| 200 | OK - The request was successful |
-| 201 | Created - A resource was successfully created |
-| 204 | No Content - The request was successful (used for DELETE) |
+| 200 | OK - Request successful |
+| 201 | Created - Resource created successfully |
+| 204 | No Content - Request successful, no content to return |
 | 400 | Bad Request - Invalid request format or parameters |
 | 401 | Unauthorized - Authentication required or failed |
-| 403 | Forbidden - Authenticated but not authorized |
+| 403 | Forbidden - Authenticated but not authorized for resource |
 | 404 | Not Found - Resource not found |
-| 500 | Internal Server Error - Something went wrong on the server |
-| 503 | Service Unavailable - Service temporary unavailable (e.g., database down) |
+| 500 | Internal Server Error - Server error |
+| 503 | Service Unavailable - Service temporarily unavailable |
 
-## <a name='Examples'></a>Examples
+### Error Response Format
 
-### <a name='curlExamples'></a>curl Examples
+All errors follow this format:
+```json
+{
+  "error": "Brief error message",
+  "message": "Detailed explanation (optional)"
+}
+```
 
-Register a user:
+### Prisma-Specific Error Codes
+- `P2023`: Invalid ID format
+- `P2025`: Record not found
+
+## CORS Configuration
+
+CORS is configured to accept requests from allowed origins:
+
+**Default Origins (Development)**
+- `http://localhost:5173` (Frontend dev server)
+- `http://localhost:3001` (Backend)
+
+**Configuration**
+Set via `CORS_ORIGIN` environment variable. Multiple origins can be comma-separated:
+```
+CORS_ORIGIN=http://localhost:5173,https://app.example.com
+```
+
+**Allowed Methods**: GET, POST, PUT, DELETE
+**Allowed Headers**: Content-Type, Authorization
+
+## Rate Limiting
+
+Currently, no rate limiting is implemented. For production, consider adding rate limiting middleware.
+
+## Examples
+
+### Complete Workflow Example
+
+1. **Register a new user**
 ```bash
 curl -X POST http://localhost:3001/api/auth/register \
   -H "Content-Type: application/json" \
-  -d '{"email":"user@example.com","password":"password123","name":"User Name"}'
+  -d '{
+    "email": "newuser@example.com",
+    "password": "securepassword123",
+    "name": "New User"
+  }'
 ```
 
-Login:
+2. **Login (if already registered)**
 ```bash
 curl -X POST http://localhost:3001/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"user@example.com","password":"password123"}'
+  -d '{
+    "email": "newuser@example.com",
+    "password": "securepassword123"
+  }'
+
+# Save the token from the response
+TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 ```
 
-Create a project:
+3. **Create a project**
 ```bash
 curl -X POST http://localhost:3001/api/projects \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -d '{"title":"API Test Project","description":"Created via API","status":"Planning"}'
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "title": "My Awesome Project",
+    "status": "In Progress",
+    "description": "Building something amazing",
+    "githubUrl": "https://github.com/user/awesome-project",
+    "hardwareInfo": {
+      "platform": "Raspberry Pi 4",
+      "sensors": "DHT22, PIR"
+    }
+  }'
 ```
 
-Get all projects:
+4. **Get all your projects**
 ```bash
 curl -X GET http://localhost:3001/api/projects \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+5. **Update a project**
+```bash
+curl -X PUT http://localhost:3001/api/projects/PROJECT_ID \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "title": "My Awesome Project v2",
+    "status": "Completed",
+    "description": "Successfully built something amazing!"
+  }'
+```
+
+### cURL Examples
+
+**Check API health**
+```bash
+curl http://localhost:3001/health
+```
+
+**Get metrics**
+```bash
+curl http://localhost:3001/metrics
+```
+
+**Get user profile**
+```bash
+curl -X GET http://localhost:3001/api/auth/profile \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-Delete a project:
-```bash
-curl -X DELETE http://localhost:3001/api/projects/PROJECT_ID \
-  -H "Authorization: Bearer YOUR_TOKEN"
+### JavaScript/Axios Examples
+
+**Using the auth service**
+```javascript
+import { login, getProjects } from './services';
+
+// Login
+const { token, user } = await login({
+  email: 'user@example.com',
+  password: 'password123'
+});
+
+// Get projects (token is automatically included)
+const projects = await getProjects();
+```
+
+**Direct API call with fetch**
+```javascript
+const response = await fetch('http://localhost:3001/api/projects', {
+  headers: {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  }
+});
+const projects = await response.json();
 ```

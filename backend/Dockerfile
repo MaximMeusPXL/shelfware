@@ -34,10 +34,10 @@
     COPY --from=build /app/node_modules ./node_modules
     COPY --from=build /app/package.json ./
     
-    # 3) Remove the OpenSSL-1.1 engine so Prisma will use the OpenSSL-3 build
+    # 3) Remove the OpenSSL-1.1 Prisma engine binary so Prisma falls back to the OpenSSL-3 build
     RUN rm -f node_modules/.prisma/client/libquery_engine-debian-openssl-1.1*.so.node
     
-    # 4) (Optional) Copy your Prisma schema if you need it at runtime
+    # 4) (Optional) Copy Prisma schema if needed at runtime
     COPY --from=build /app/prisma       ./prisma
     
     # 5) Run in production mode
